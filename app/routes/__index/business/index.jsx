@@ -313,9 +313,18 @@ const BusinessIndex = () => {
 
                   <div className="py-4">
                     <h2 className="text-base py-2 font-semibold">
-                      Mekan Özellikleri
+                      İşletme Özellikleri
                     </h2>
                     <div className="flex flex-wrap">
+                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
+                        Gel Al
+                      </span>
+                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
+                        Kahvaltı
+                      </span>
+                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
+                        Paket Servis
+                      </span>
                       <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
                         Ücretsiz Wi-Fi
                       </span>
@@ -383,6 +392,61 @@ const BusinessIndex = () => {
                       <span>PAZAR</span>
                       <span>09:00 - 20:00</span>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="py-10">
+              <h1 className="text-xl font-bold">Kuryeler</h1>
+              <div className="flex flex-wrap justify-start text-center pt-4">
+                <div className="w-1/4 pt-4">
+                  <img
+                    className="w-32 h-32 mx-auto"
+                    src="https://img.freepik.com/free-icon/user_318-563642.jpg"
+                  />
+                  <div className="flex flex-col text-center mt-2">
+                    <p>Ahmet B.</p>
+                  </div>
+                </div>
+
+                <div className="w-1/4 pt-4">
+                  <img
+                    className="w-32 h-32 mx-auto"
+                    src="https://img.freepik.com/free-icon/user_318-563642.jpg"
+                  />
+                  <div className="flex flex-col text-center mt-2">
+                    <p>Ahmet B.</p>
+                  </div>
+                </div>
+
+                <div className="w-1/4 pt-4">
+                  <img
+                    className="w-32 h-32 mx-auto"
+                    src="https://img.freepik.com/free-icon/user_318-563642.jpg"
+                  />
+                  <div className="flex flex-col text-center mt-2">
+                    <p>Ahmet B.</p>
+                  </div>
+                </div>
+
+                <div className="w-1/4 pt-4">
+                  <img
+                    className="w-32 h-32 mx-auto"
+                    src="https://img.freepik.com/free-icon/user_318-563642.jpg"
+                  />
+                  <div className="flex flex-col text-center mt-2">
+                    <p>Ahmet B.</p>
+                  </div>
+                </div>
+
+                <div className="w-1/4 pt-4">
+                  <img
+                    className="w-32 h-32 mx-auto"
+                    src="https://img.freepik.com/free-icon/user_318-563642.jpg"
+                  />
+                  <div className="flex flex-col text-center mt-2">
+                    <p>Ahmet B.</p>
                   </div>
                 </div>
               </div>
