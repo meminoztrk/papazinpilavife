@@ -1,0 +1,488 @@
+[
+    {
+        "sehirID": "500",
+        "sehirAdi": "ADANA",
+        "sehirAdiEn": "ADANA",
+        "ilceID": "9146"
+    },
+    {
+        "sehirID": "501",
+        "sehirAdi": "ADIYAMAN",
+        "sehirAdiEn": "ADIYAMAN",
+        "ilceID": "9158"
+    },
+    {
+        "sehirID": "502",
+        "sehirAdi": "AFYONKARAHİSAR",
+        "sehirAdiEn": "AFYONKARAHISAR",
+        "ilceID": "9167"
+    },
+    {
+        "sehirID": "503",
+        "sehirAdi": "AĞRI",
+        "sehirAdiEn": "AGRI",
+        "ilceID": "9185"
+    },
+    {
+        "sehirID": "504",
+        "sehirAdi": "AKSARAY",
+        "sehirAdiEn": "AKSARAY",
+        "ilceID": "9193"
+    },
+    {
+        "sehirID": "505",
+        "sehirAdi": "AMASYA",
+        "sehirAdiEn": "AMASYA",
+        "ilceID": "9198"
+    },
+    {
+        "sehirID": "506",
+        "sehirAdi": "ANKARA",
+        "sehirAdiEn": "ANKARA",
+        "ilceID": "9206"
+    },
+    {
+        "sehirID": "507",
+        "sehirAdi": "ANTALYA",
+        "sehirAdiEn": "ANTALYA",
+        "ilceID": "9225"
+    },
+    {
+        "sehirID": "508",
+        "sehirAdi": "ARDAHAN",
+        "sehirAdiEn": "ARDAHAN",
+        "ilceID": "9238"
+    },
+    {
+        "sehirID": "509",
+        "sehirAdi": "ARTVİN",
+        "sehirAdiEn": "ARTVIN",
+        "ilceID": "9246"
+    },
+    {
+        "sehirID": "510",
+        "sehirAdi": "AYDIN",
+        "sehirAdiEn": "AYDIN",
+        "ilceID": "9252"
+    },
+    {
+        "sehirID": "511",
+        "sehirAdi": "BALIKESİR",
+        "sehirAdiEn": "BALIKESIR",
+        "ilceID": "9270"
+    },
+    {
+        "sehirID": "512",
+        "sehirAdi": "BARTIN",
+        "sehirAdiEn": "BARTIN",
+        "ilceID": "9285"
+    },
+    {
+        "sehirID": "513",
+        "sehirAdi": "BATMAN",
+        "sehirAdiEn": "BATMAN",
+        "ilceID": "9288"
+    },
+    {
+        "sehirID": "514",
+        "sehirAdi": "BAYBURT",
+        "sehirAdiEn": "BAYBURT",
+        "ilceID": "9295"
+    },
+    {
+        "sehirID": "515",
+        "sehirAdi": "BİLECİK",
+        "sehirAdiEn": "BILECIK",
+        "ilceID": "9297"
+    },
+    {
+        "sehirID": "516",
+        "sehirAdi": "BİNGÖL",
+        "sehirAdiEn": "BINGOL",
+        "ilceID": "9303"
+    },
+    {
+        "sehirID": "517",
+        "sehirAdi": "BİTLİS",
+        "sehirAdiEn": "BITLIS",
+        "ilceID": "9311"
+    },
+    {
+        "sehirID": "518",
+        "sehirAdi": "BOLU",
+        "sehirAdiEn": "BOLU",
+        "ilceID": "9315"
+    },
+    {
+        "sehirID": "519",
+        "sehirAdi": "BURDUR",
+        "sehirAdiEn": "BURDUR",
+        "ilceID": "9327"
+    },
+    {
+        "sehirID": "520",
+        "sehirAdi": "BURSA",
+        "sehirAdiEn": "BURSA",
+        "ilceID": "9335"
+    },
+    {
+        "sehirID": "521",
+        "sehirAdi": "ÇANAKKALE",
+        "sehirAdiEn": "CANAKKALE",
+        "ilceID": "9352"
+    },
+    {
+        "sehirID": "522",
+        "sehirAdi": "ÇANKIRI",
+        "sehirAdiEn": "CANKIRI",
+        "ilceID": "9359"
+    },
+    {
+        "sehirID": "523",
+        "sehirAdi": "ÇORUM",
+        "sehirAdiEn": "CORUM",
+        "ilceID": "9370"
+    },
+    {
+        "sehirID": "524",
+        "sehirAdi": "DENİZLİ",
+        "sehirAdiEn": "DENIZLI",
+        "ilceID": "9392"
+    },
+    {
+        "sehirID": "525",
+        "sehirAdi": "DİYARBAKIR",
+        "sehirAdiEn": "DIYARBAKIR",
+        "ilceID": "9402"
+    },
+    {
+        "sehirID": "526",
+        "sehirAdi": "DÜZCE",
+        "sehirAdiEn": "DUZCE",
+        "ilceID": "9414"
+    },
+    {
+        "sehirID": "527",
+        "sehirAdi": "EDİRNE",
+        "sehirAdiEn": "EDIRNE",
+        "ilceID": "9419"
+    },
+    {
+        "sehirID": "528",
+        "sehirAdi": "ELAZIĞ",
+        "sehirAdiEn": "ELAZIG",
+        "ilceID": "9432"
+    },
+    {
+        "sehirID": "529",
+        "sehirAdi": "ERZİNCAN",
+        "sehirAdiEn": "ERZINCAN",
+        "ilceID": "9440"
+    },
+    {
+        "sehirID": "530",
+        "sehirAdi": "ERZURUM",
+        "sehirAdiEn": "ERZURUM",
+        "ilceID": "9451"
+    },
+    {
+        "sehirID": "531",
+        "sehirAdi": "ESKİŞEHİR",
+        "sehirAdiEn": "ESKISEHIR",
+        "ilceID": "9470"
+    },
+    {
+        "sehirID": "532",
+        "sehirAdi": "GAZİANTEP",
+        "sehirAdiEn": "GAZIANTEP",
+        "ilceID": "9479"
+    },
+    {
+        "sehirID": "533",
+        "sehirAdi": "GİRESUN",
+        "sehirAdiEn": "GIRESUN",
+        "ilceID": ""
+    },
+    {
+        "sehirID": "534",
+        "sehirAdi": "GÜMÜŞHANE",
+        "sehirAdiEn": "GUMUSHANE",
+        "ilceID": "9501"
+    },
+    {
+        "sehirID": "535",
+        "sehirAdi": "HAKKARİ",
+        "sehirAdiEn": "HAKKARI",
+        "ilceID": "9507"
+    },
+    {
+        "sehirID": "536",
+        "sehirAdi": "HATAY",
+        "sehirAdiEn": "HATAY",
+        "ilceID": "20089"
+    },
+    {
+        "sehirID": "537",
+        "sehirAdi": "IĞDIR",
+        "sehirAdiEn": "IGDIR",
+        "ilceID": "9522"
+    },
+    {
+        "sehirID": "538",
+        "sehirAdi": "ISPARTA",
+        "sehirAdiEn": "ISPARTA",
+        "ilceID": "9528"
+    },
+    {
+        "sehirID": "539",
+        "sehirAdi": "İSTANBUL",
+        "sehirAdiEn": "ISTANBUL",
+        "ilceID": "9541"
+    },
+    {
+        "sehirID": "540",
+        "sehirAdi": "İZMİR",
+        "sehirAdiEn": "IZMIR",
+        "ilceID": "9560"
+    },
+    {
+        "sehirID": "541",
+        "sehirAdi": "KAHRAMANMARAŞ",
+        "sehirAdiEn": "KAHRAMANMARAS",
+        "ilceID": "9577"
+    },
+    {
+        "sehirID": "542",
+        "sehirAdi": "KARABÜK",
+        "sehirAdiEn": "KARABUK",
+        "ilceID": "9581"
+    },
+    {
+        "sehirID": "543",
+        "sehirAdi": "KARAMAN",
+        "sehirAdiEn": "KARAMAN",
+        "ilceID": "9587"
+    },
+    {
+        "sehirID": "544",
+        "sehirAdi": "KARS",
+        "sehirAdiEn": "KARS",
+        "ilceID": "9594"
+    },
+    {
+        "sehirID": "545",
+        "sehirAdi": "KASTAMONU",
+        "sehirAdiEn": "KASTAMONU",
+        "ilceID": "9609"
+    },
+    {
+        "sehirID": "546",
+        "sehirAdi": "KAYSERİ",
+        "sehirAdiEn": "KAYSERI",
+        "ilceID": "9620"
+    },
+    {
+        "sehirID": "547",
+        "sehirAdi": "KİLİS",
+        "sehirAdiEn": "KILIS",
+        "ilceID": "9629"
+    },
+    {
+        "sehirID": "548",
+        "sehirAdi": "KIRIKKALE",
+        "sehirAdiEn": "KIRIKKALE",
+        "ilceID": "9635"
+    },
+    {
+        "sehirID": "549",
+        "sehirAdi": "KIRKLARELİ",
+        "sehirAdiEn": "KIRKLARELI",
+        "ilceID": "9638"
+    },
+    {
+        "sehirID": "550",
+        "sehirAdi": "KIRŞEHİR",
+        "sehirAdiEn": "KIRSEHIR",
+        "ilceID": "9646"
+    },
+    {
+        "sehirID": "551",
+        "sehirAdi": "KOCAELİ",
+        "sehirAdiEn": "KOCAELI",
+        "ilceID": "9654"
+    },
+    {
+        "sehirID": "552",
+        "sehirAdi": "KONYA",
+        "sehirAdiEn": "KONYA",
+        "ilceID": "9676"
+    },
+    {
+        "sehirID": "553",
+        "sehirAdi": "KÜTAHYA",
+        "sehirAdiEn": "KUTAHYA",
+        "ilceID": "9689"
+    },
+    {
+        "sehirID": "554",
+        "sehirAdi": "MALATYA",
+        "sehirAdiEn": "MALATYA",
+        "ilceID": "9703"
+    },
+    {
+        "sehirID": "555",
+        "sehirAdi": "MANİSA",
+        "sehirAdiEn": "MANISA",
+        "ilceID": "9716"
+    },
+    {
+        "sehirID": "556",
+        "sehirAdi": "MARDİN",
+        "sehirAdiEn": "MARDIN",
+        "ilceID": "9726"
+    },
+    {
+        "sehirID": "557",
+        "sehirAdi": "MERSİN",
+        "sehirAdiEn": "MERSIN",
+        "ilceID": "9737"
+    },
+    {
+        "sehirID": "558",
+        "sehirAdi": "MUĞLA",
+        "sehirAdiEn": "MUGLA",
+        "ilceID": "9747"
+    },
+    {
+        "sehirID": "559",
+        "sehirAdi": "MUŞ",
+        "sehirAdiEn": "MUS",
+        "ilceID": "9755"
+    },
+    {
+        "sehirID": "560",
+        "sehirAdi": "NEVŞEHİR",
+        "sehirAdiEn": "NEVSEHIR",
+        "ilceID": "9760"
+    },
+    {
+        "sehirID": "561",
+        "sehirAdi": "NİĞDE",
+        "sehirAdiEn": "NIGDE",
+        "ilceID": "9766"
+    },
+    {
+        "sehirID": "562",
+        "sehirAdi": "ORDU",
+        "sehirAdiEn": "ORDU",
+        "ilceID": "9782"
+    },
+    {
+        "sehirID": "563",
+        "sehirAdi": "OSMANİYE",
+        "sehirAdiEn": "OSMANIYE",
+        "ilceID": "9788"
+    },
+    {
+        "sehirID": "564",
+        "sehirAdi": "RİZE",
+        "sehirAdiEn": "RIZE",
+        "ilceID": "9799"
+    },
+    {
+        "sehirID": "565",
+        "sehirAdi": "SAKARYA",
+        "sehirAdiEn": "SAKARYA",
+        "ilceID": "9807"
+    },
+    {
+        "sehirID": "566",
+        "sehirAdi": "SAMSUN",
+        "sehirAdiEn": "SAMSUN",
+        "ilceID": "9819"
+    },
+    {
+        "sehirID": "567",
+        "sehirAdi": "ŞANLIURFA",
+        "sehirAdiEn": "SANLIURFA",
+        "ilceID": "9831"
+    },
+    {
+        "sehirID": "568",
+        "sehirAdi": "SİİRT",
+        "sehirAdiEn": "SIIRT",
+        "ilceID": "9839"
+    },
+    {
+        "sehirID": "569",
+        "sehirAdi": "SİNOP",
+        "sehirAdiEn": "SINOP",
+        "ilceID": "9847"
+    },
+    {
+        "sehirID": "570",
+        "sehirAdi": "ŞIRNAK",
+        "sehirAdiEn": "SIRNAK",
+        "ilceID": "9854"
+    },
+    {
+        "sehirID": "571",
+        "sehirAdi": "SİVAS",
+        "sehirAdiEn": "SIVAS",
+        "ilceID": "9868"
+    },
+    {
+        "sehirID": "572",
+        "sehirAdi": "TEKİRDAĞ",
+        "sehirAdiEn": "TEKIRDAG",
+        "ilceID": "9879"
+    },
+    {
+        "sehirID": "573",
+        "sehirAdi": "TOKAT",
+        "sehirAdiEn": "TOKAT",
+        "ilceID": "9887"
+    },
+    {
+        "sehirID": "574",
+        "sehirAdi": "TRABZON",
+        "sehirAdiEn": "TRABZON",
+        "ilceID": "9905"
+    },
+    {
+        "sehirID": "575",
+        "sehirAdi": "TUNCELİ",
+        "sehirAdiEn": "TUNCELI",
+        "ilceID": "9914"
+    },
+    {
+        "sehirID": "576",
+        "sehirAdi": "UŞAK",
+        "sehirAdiEn": "USAK",
+        "ilceID": "9919"
+    },
+    {
+        "sehirID": "577",
+        "sehirAdi": "VAN",
+        "sehirAdiEn": "VAN",
+        "ilceID": "9930"
+    },
+    {
+        "sehirID": "578",
+        "sehirAdi": "YALOVA",
+        "sehirAdiEn": "YALOVA",
+        "ilceID": "9935"
+    },
+    {
+        "sehirID": "579",
+        "sehirAdi": "YOZGAT",
+        "sehirAdiEn": "YOZGAT",
+        "ilceID": "9949"
+    },
+    {
+        "sehirID": "580",
+        "sehirAdi": "ZONGULDAK",
+        "sehirAdiEn": "ZONGULDAK",
+        "ilceID": "9955"
+    }
+]

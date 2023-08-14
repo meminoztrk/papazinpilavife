@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,
+body {
+  height: 100%;
+  /* zoom: 95%; */
+  background-color: #f3f4f6 !important;
+}
+
+.ant-popover-placement-bottomRight .ant-popover-arrow {
+  right: 5px;
+  top: 2px;
+}
+
+.slick-dots {
+  position: relative !important;
+  bottom: 0px !important;
+  text-align: left !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+.slick-dots li {
+  height: 30px !important;
+  width: 34px !important;
+  text-align: center;
+  padding: 16px;
+  flex: 1 !important;
+  margin: 0 !important;
+  background-color: #e5e7eb !important;
+}
+
+.slick-dots li span {
+  display: block;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+
+.slick-dots li.slick-active {
+  background-color: #ef4444 !important;
+  color: white !important;
+}
+
+.slick-dots li:hover {
+  background-color: #ef4444 !important;
+  color: white !important;
+}
+
+.swiper-pagination {
+  bottom: 0 !important;
+  position: inherit !important;
+  width: auto !important;
+  margin-right: 32px;
+  right: 0;
+  display: flex;
+}
+
+.swiper-pagination-bullet {
+  width: 30px !important;
+  border-radius: 0 !important;
+  padding-top: 3px;
+  flex-grow: 1;
+  font-size: 14px;
+  height: 30px !important;
+  background-color: #e5e7eb !important;
+  font-weight: 600;
+  margin: 0 !important;
+  bottom: 15px !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  color: white;
+  background-color: #ef4444 !important;
+}
+
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: none !important;
+}
+
+.swiper-button-next-unique {
+  background: url(http://cdn.onlinewebfonts.com/svg/img_98761.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 30px;
+  opacity: 0.2;
+  top: 0;
+  width: 180px;
+  height: 70px;
+  -webkit-filter: drop-shadow(-5px 0px 3.5px #222);
+  filter: drop-shadow(-5px 0px 3.5px #222);
+  margin-left: -20px;
+  margin-bottom: 30px;
+}
+
+.swiper-button-prev-unique {
+  background: url(http://cdn.onlinewebfonts.com/svg/img_98761.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  background-size: 30px;
+  opacity: 0.2;
+  width: 180px;
+  height: 70px;
+  -webkit-filter: drop-shadow(-5px 0px 3.5px #222);
+  filter: drop-shadow(-5px 0px 3.5px #222);
+  margin-left: -25px;
+  margin-right: -20px;
+  margin-bottom: 30px;
+}
+
+.destur {
+  /* padding-right: 15px !important;
+  padding-left: 15px !important; */
+  /* margin: 10px !important; */
+}
+
+.navbar-fixed-top.scrolled {
+  background-color: red !important;
+  transition: background-color 200ms linear;
+}
+
+.thumb {
+  position: relative;
+}
+
+.thumb .imgbox {
+  display: block;
+  height: 100%;
+}
+
+.thumb .imgbox:after {
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: 80%;
+  left: 0;
+  bottom: 0;
+  content: "";
+  background: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: -webkit-gradient(linear,left top,left  bottom, color-stop(0,rgba(0,0,0,0)),color-stop(100%,rgba(0,0,0,.90)));
+  background: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+}
+
+.thumbn {
+  position: relative;
+}
+
+.thumbn .imgbox {
+  display: block;
+  height: 100%;
+}
+
+.thumbn .imgbox:after {
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: 50%;
+  left: 0;
+  bottom: 0;
+  content: "";
+  background: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: -webkit-gradient(linear,left top,left  bottom, color-stop(0,rgba(0,0,0,0)),color-stop(100%,rgba(0,0,0,.90)));
+  background: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+  background: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.90) 100%);
+}
+
+
+
+.basket {
+  transition: opacity 0.5s;
+  opacity: 1;
+}
+.basket.hide {
+  opacity: 0;
+  pointer-events:none;
+}
+
+.ant-layout-sider-children .img{
+  margin: 16px;
+  padding: 5px;;
+  background-color: white;
+  opacity: 0.7;
+}
+.ant-layout-sider-children .img .logo {
+  height: 32px;
+  background: url("https://images.static-thomann.de/pics//images/logos/thomann-cyan-black.svg") no-repeat scroll right center white;
+  
+}
+
+.ant-switch {
+  background-color:#B9B9B9;
+}
+
+.ant-switch-checked {
+  background: #1890ff;
+}
+
+.ant-btn-primary {
+  color: #fff;
+  border-color: #1890ff;
+  background: #1890ff;
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
+}
+
+.ant-cascader-menu {
+  height: 100%;
+  font-family: "Poppins"
+}
+
+.ck-editor__editable_inline {
+  min-height: 300px;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #fb923c;
+  border-color: #fb923c !important;
+}
+
+.ant-radio-checked .ant-radio-inner{
+  border-color: #fb923c !important ;
+}
+
+.ant-radio-checked .ant-radio-inner:after{
+  background-color: #fb923c;
+}
+
+.ant-radio:hover .ant-radio-inner {
+  border-color: #fb923c ;
+}
+
+.ant-tree-switcher{
+  display: none !important;
+}
+
+.ant-popover-inner {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(90, 0, 0); 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black; 
+}
+
+.ck-content p {
+  font-size: 16px;
+  padding: 8px 0;
+}
+
+.ck-content .image.image_resized {
+  max-width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+/* ckeditor5-image/theme/imageresize.css */
+.ck-content .image.image_resized img {
+  width: 100%;
+}
+/* ckeditor5-image/theme/imageresize.css */
+.ck-content .image.image_resized > figcaption {
+  display: block;
+}
+/* ckeditor5-image/theme/image.css */
+.ck-content .image {
+  display: table;
+  clear: both;
+  text-align: center;
+  margin: 0.9em auto;
+  min-width: 50px;
+  width: 100%;
+}
+/* ckeditor5-image/theme/image.css */
+.ck-content .image img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  min-width: 100%;
+}
+/* ckeditor5-image/theme/image.css */
+.ck-content .image-inline {
+  /*
+   * Normally, the .image-inline would have "display: inline-block" and "img { width: 100% }" (to follow the wrapper while resizing).;
+   * Unfortunately, together with "srcset", it gets automatically stretched up to the width of the editing root.
+   * This strange behavior does not happen with inline-flex.
+   */
+  display: inline-flex;
+  max-width: 100%;
+  align-items: flex-start;
+}
+/* ckeditor5-image/theme/image.css */
+.ck-content .image-inline picture {
+  display: flex;
+}
+/* ckeditor5-image/theme/image.css */
+.ck-content .image-inline picture,
+.ck-content .image-inline img {
+  flex-grow: 1;
+  flex-shrink: 1;
+  max-width: 100%;
+}
+/* ckeditor5-image/theme/imagecaption.css */
+.ck-content .image > figcaption {
+  display: table-caption;
+  caption-side: bottom;
+  word-break: break-word;
+  color: var(--ck-color-image-caption-text);
+  background-color: var(--ck-color-image-caption-background);
+  padding: .6em;
+  font-size: .75em;
+  outline-offset: -1px;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-block-align-left,
+.ck-content .image-style-block-align-right {
+  max-width: calc(100% - var(--ck-image-style-spacing));
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-align-left,
+.ck-content .image-style-align-right {
+  clear: none;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-side {
+  float: right;
+  margin-left: var(--ck-image-style-spacing);
+  max-width: 50%;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-align-left {
+  float: left;
+  margin-right: var(--ck-image-style-spacing);
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-align-right {
+  float: right;
+  margin-left: var(--ck-image-style-spacing);
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-block-align-right {
+  margin-right: 0;
+  margin-left: auto;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-style-block-align-left {
+  margin-left: 0;
+  margin-right: auto;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content p + .image-style-align-left,
+.ck-content p + .image-style-align-right,
+.ck-content p + .image-style-side {
+  margin-top: 0;
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-inline.image-style-align-left,
+.ck-content .image-inline.image-style-align-right {
+  margin-top: var(--ck-inline-image-style-spacing);
+  margin-bottom: var(--ck-inline-image-style-spacing);
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-inline.image-style-align-left {
+  margin-right: var(--ck-inline-image-style-spacing);
+}
+/* ckeditor5-image/theme/imagestyle.css */
+.ck-content .image-inline.image-style-align-right {
+  margin-left: var(--ck-inline-image-style-spacing);
+}
+
+.pagination .selected {
+  border: 1px red solid;
+  border-radius: 10%;
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+}
+
+.pagination li {
+  padding: 5px 10px;
+}
+
+
+/* #nprogress .bar {
+  background: #4d4d4d !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #4d4d4d, 0 0 5px #4d4d4d;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #4d4d4d;
+  border-left-color: #4d4d4d;
+} */
+
+.ant-rate-star:not(:last-child){
+  margin-right: 2px !important;
+}
