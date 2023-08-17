@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   FaFacebookF,
   FaTwitter,
@@ -11,7 +11,8 @@ import {
   AiOutlineUserAdd,
   AiOutlineSearch,
   AiOutlineLoading,
-  AiFillStar
+  AiOutlineSwapRight,
+  AiFillStar,
 } from "react-icons/ai";
 import { LoadingOutlined } from "@ant-design/icons";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -30,10 +31,28 @@ const date = new Date();
 
 export const Header = ({ openModal, data }) => {
   const [navbar, setNavbar] = useState(false);
-  const [swidth, setSwidth] = useState({ s1: 40, s2: 40, s3: 40 });
-  const [nextVakit, setNextVakit] = useState({});
+  const [search, setSearch] = useState("");
+  const [hidden, setHidden] = useState(true);
   const [userlink, setUserlink] = useState(false);
-  const [loading, setLoading] = useState({ namaz: false });
+  const [provinces, setProvinces] = useState([]);
+  let menuRef = useRef();
+  let start = new Date();
+
+  const getSearchingProvince = async (value) => {
+    console.log(value);
+    await fetch(data.API + `/Generic/GetSearchingProvinces?value=${value}`, {
+      method: "GET",
+      headers: {
+        // 'ApiKey': API_KEY,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProvinces(data.data);
+      });
+  };
+
 
   const changeBackground = () => {
     if (window.scrollY >= 126) {
@@ -44,26 +63,30 @@ export const Header = ({ openModal, data }) => {
   };
 
   useEffect(() => {
+    let handler = (e) => {
+      if (!menuRef.current.contains(e.target)) {
+        setHidden(true);
+      }
+    };
+    window.addEventListener("mousedown", handler);
+
     changeBackground();
     getUserToken() && setUserlink(true);
+
     // adding the event when scroll change background
     window.addEventListener("scroll", changeBackground);
     return () => window.addEventListener("scroll", changeBackground);
   }, []);
 
-  const content = data.data.categories.slice(9).map((x, i) => (
-    <Link
-      key={i}
-      className="hover:text-red-500"
-      to={`/kategoriler/${seoHelp(x.name)}`}
-    >
-      {x.name}
-    </Link>
-  ));
-
   return (
-    <div className="fixed  w-full top-0 z-40 font-inter">
-      <div className={navbar ? "hidden" : " mx-auto xl:px-48 lg:px-12 px-2  pt-5 bg-gray-200"}>
+    <div className="fixed w-full top-0 z-40 font-inter">
+      <div
+        className={
+          navbar
+            ? "hidden"
+            : " mx-auto xl:px-48 lg:px-12 px-2  pt-5 bg-gray-200"
+        }
+      >
         <div className="flex items-center justify-center text-gray-800">
           <div className="w-20 justify-center">
             <Link to="/">
@@ -86,7 +109,7 @@ export const Header = ({ openModal, data }) => {
                 <li className="cursor-pointer hover:text-white hover:bg-gray-300 p-1 rounded-full">
                   <FaInstagram />
                 </li>
-              </ul>          
+              </ul>
             </div>
 
             {!userlink ? (
@@ -141,13 +164,43 @@ export const Header = ({ openModal, data }) => {
       >
         <div className="container mx-auto xl:px-48 lg:px-12 px-2 ">
           <div className="flex items-center justify-center text-gray-800 cursor-pointer">
-            <Input
-              className="w-80 rounded-l-xl h-12 px-4"
-              placeholder="Ne aramak istediğiniz..."
-            />
-            <Input className="w-60 h-12 px-4n" placeholder="Konum" />
-            <div className="bg-red-600 py-[14px] rounded-r-xl pl-3 pr-4 stroke-2">
-              <AiOutlineSearch fontSize={19} color="white" strokeWidth={2} />
+            <div>
+              <Input
+                className="w-96 rounded-l-xl h-12 px-4"
+                placeholder="Ne aramak istediğiniz..."
+              />
+            </div>
+            <div className="flex items-center">
+              <div className="relative flex" ref={menuRef}>
+                <Input
+                  className="w-80 h-12 px-4n"
+                  placeholder="Konum"
+                  onChange={(e) => {setSearch(e.target.value); start=new Date();setTimeout(function(){if ((new Date() - start)>250) {getSearchingProvince(e.target.value);setHidden(false);}}, 250);} }  
+                  value={search}        
+                />
+                <div
+                  className={`top-12 w-full cursor-default absolute bg-white rounded-b-lg border py-4 p-2 ${
+                    hidden ? "hidden" : "flex"
+                  } flex-col`}
+                >
+                 
+                  {provinces.length > 0 ? provinces.map((x, i) => (
+                    <Link
+                      to={"/business"}
+                      key={i}
+                      className="hover:bg-gray-100 hover:text-black font-medium rounded-lg w-full p-2 flex items-center"
+                      onClick={()=>{setSearch(x.city);setHidden(true)}}
+                    >
+                       <AiOutlineSwapRight className="text-gray-400 mr-2"/>
+                      {x.city}
+                    </Link>
+                  )) :
+                  <span className="pb-10 text-gray-200">Konum girin</span>}
+                </div>
+              </div>
+              <div className="bg-red-600 py-[14px] rounded-r-xl pl-3 pr-4 stroke-2">
+                <AiOutlineSearch fontSize={19} color="white" strokeWidth={2} />
+              </div>
             </div>
           </div>
         </div>
@@ -160,11 +213,17 @@ export const Header = ({ openModal, data }) => {
         }
       >
         <div className="container mx-auto xl:px-48 lg:px-12 px-2 md:text-[14px] text-[10px] flex justify-between items-center font-medium text-white">
-          <Link to={"/"} className="md:flex hidden items-center hover:text-white hover:cursor-pointer e-x-4">
-            <AiFillStar className="text-yellow-500 text-lg mr-2"/>
+          <Link
+            to={"/"}
+            className="md:flex hidden items-center hover:text-white hover:cursor-pointer e-x-4"
+          >
+            <AiFillStar className="text-yellow-500 text-lg mr-2" />
             Popüler
           </Link>
-          <Link to={"/business"} className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4">
+          <Link
+            to={"/business"}
+            className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4"
+          >
             Restoran
           </Link>
           <ul className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4">

@@ -30,7 +30,7 @@ export function links() {
 
 export const loader = async ({ request }) => {
   require('dotenv').config()
-  const req = await fetch(process.env.REACT_APP_API + "/Common", {
+  const req = await fetch(process.env.REACT_APP_API + "/Generic/GetAbout", {
     headers: {
       'ApiKey': process.env.REACT_APP_API_KEY,
       'Content-Type': 'application/json'
@@ -43,8 +43,8 @@ export const loader = async ({ request }) => {
 }
 
 export const meta = ({ data }) => {
-  const description = data.data.about.seoDescription
-  const keywords = data.data.about.seoKeywords
+  const description = data.data.seoDescription
+  const keywords = data.data.seoKeywords
   const title = "Papazinpilavi"
   return {
     description,
@@ -52,7 +52,7 @@ export const meta = ({ data }) => {
     title,
     "og:url": "https://www.diyanetgonulluleri.com",
     "og:type": "website",
-    "og:site_name": data.data.about.name,
+    "og:site_name": data.data.name,
     // "og:image": data.IMAGES + "about/" + data.data.about.logo,
     "og:image": "https://images.alphacoders.com/472/472647.jpg",
     "og:image:width": 1280,

@@ -39,9 +39,9 @@ export const Footer = ({ data }) => {
                             <nav>
                                 <ul className='flex flex-wrap items-center px-4 py-8 w-full'>
                                     <Link className="md:w-1/3 w-1/2 p-2" to={"/"}><span className='block bg-gray-100 hover:bg-gray-200 cursor-pointer p-2 px-4 rounded text-gray-600'>Anasayfa</span></Link>
-                                    {data.data.categories.slice(0,8).map((x, i) => (
+                                    {/* {data.data.categories.slice(0,8).map((x, i) => (
                                         <Link key={i} className="md:w-1/3 w-1/2 p-2" to={`/kategoriler/${seoHelp(x.name)}`}><span className='block bg-gray-100 hover:bg-gray-200 cursor-pointer p-2 px-4 rounded text-gray-600'>{x.name}</span></Link>
-                                    ))}
+                                    ))} */}
 
                                 </ul>
                             </nav>
