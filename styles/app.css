@@ -439,3 +439,9 @@ body {
 .ant-rate-star:not(:last-child){
   margin-right: 2px !important;
 }
+
+.alert-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 250ms linear 0.1s; 
+}
