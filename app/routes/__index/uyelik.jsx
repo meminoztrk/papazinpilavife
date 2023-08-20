@@ -49,8 +49,8 @@ const uyelik = () => {
 
 
     return (
-        <div className='mt-8'>
-            <div className='grid md:grid-cols-2 grid-cols-1 md:space-x-8 space-x-0 md:space-y-0 space-y-8'>
+        <div className='mt-32'>
+            <div className='grid md:grid-cols-2 grid-cols-1 md:space-x-8 space-x-0 md:space-y-0 space-y-8 pt-10'>
                 <div className='bg-white shadow rounded-md divide-y'>
                     <div className='p-4'>
                         <div className='relative'>

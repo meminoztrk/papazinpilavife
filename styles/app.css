@@ -443,5 +443,65 @@ body {
 .alert-hidden {
   visibility: hidden;
   opacity: 0;
-  transition: all 250ms linear 0.1s; 
+  transition: all 250ms linear 0.5s; 
 }
+
+.profileSwiper .swiper-slide{
+  z-index: 0;
+}
+
+.profileSwiper .swiper-pagination{
+  display: flex;
+  text-align: right;
+  margin-right: 12px !important;
+  position: absolute !important;
+  /* top: 0; */
+  right: 0;
+  margin-bottom: 10px !important;
+  left:auto !important;
+  z-index: 1 !important;
+  font-size: 12px;
+  font-weight: 900;
+  /* letter-spacing: -2px !important; */
+  background-color: black;
+  color: white;
+  padding-left: 2px;
+  padding-right: 4px;
+  border-radius: 10%;
+}
+
+.swiper-button-prev-un {
+  background: url(http://cdn.onlinewebfonts.com/svg/img_98761.png), white;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  -webkit-filter: drop-shadow(-5px 0px 3.5px #222);
+  filter: drop-shadow(-5px 0px 3.5px #222);
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  opacity: 0.7;
+  position: absolute;
+  z-index: 2 !important;
+  top: 50%;
+  left: 0;
+  transform: translate(0%, -50%) scaleX(-1);
+}
+
+.swiper-button-next-un {
+  background: url(http://cdn.onlinewebfonts.com/svg/img_98761.png), white;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  -webkit-filter: drop-shadow(-5px 0px 3.5px #222);
+  filter: drop-shadow(-5px 0px 3.5px #222);
+  width: 30px;
+  height: 30px;
+  opacity: 0.7;
+  position: absolute;
+  z-index: 2 !important;
+  top: 50%;
+  right: 0;
+  transform: translate(0%, -50%);
+}
+

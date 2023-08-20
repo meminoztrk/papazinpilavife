@@ -226,9 +226,12 @@ export const Header = ({ openModal, data }) => {
           >
             Restoran
           </Link>
-          <ul className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4">
+          <Link
+            to={"/profile"}
+            className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4"
+          >
             Pizza
-          </ul>
+          </Link>
           <ul className="md:flex hidden  hover:text-white hover:cursor-pointer space-x-4">
             Burger
           </ul>
