@@ -2,6 +2,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
   content: ["./app/**/*.{js,ts,tsx,jsx}"],
+  important: true,
   theme: {
     extend: {},
     screens: {

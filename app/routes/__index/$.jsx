@@ -5,7 +5,7 @@ import { Link } from '@remix-run/react';
 
 const notfound = () => {
     return (
-        <div className='bg-white mt-8'>
+        <div className='bg-white mt-36'>
             <Result
                 status="404"
                 title="404"

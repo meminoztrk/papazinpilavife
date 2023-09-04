@@ -19,6 +19,7 @@ export const removeToken = () => {
 }
 
 export const getUser = async (jwt,api,api_key) => {
+    console.log("la hele user da kaç defa")
     const response = await fetch(api + "/User/user?jwt=" + jwt, {
         headers: {
             'ApiKey': api_key,

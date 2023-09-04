@@ -29,11 +29,10 @@ const { Search } = Input;
 const vakitlerName = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 const date = new Date();
 
-export const Header = ({ openModal, data }) => {
+export const Header = ({ openModal, data, existUser }) => {
   const [navbar, setNavbar] = useState(false);
   const [search, setSearch] = useState("");
   const [hidden, setHidden] = useState(true);
-  const [userlink, setUserlink] = useState(false);
   const [provinces, setProvinces] = useState([]);
   let menuRef = useRef();
   let start = new Date();
@@ -71,7 +70,6 @@ export const Header = ({ openModal, data }) => {
     window.addEventListener("mousedown", handler);
 
     changeBackground();
-    getUserToken() && setUserlink(true);
 
     // adding the event when scroll change background
     window.addEventListener("scroll", changeBackground);
@@ -112,7 +110,7 @@ export const Header = ({ openModal, data }) => {
               </ul>
             </div>
 
-            {!userlink ? (
+            {!existUser ? (
               <>
                 <div className="flex items-center py-[10px] px-4">
                   <Link to="/uyelik" className="flex items-center">
@@ -232,9 +230,12 @@ export const Header = ({ openModal, data }) => {
           >
             Pizza
           </Link>
-          <ul className="md:flex hidden  hover:text-white hover:cursor-pointer space-x-4">
+          <Link
+            to={"/search"}
+            className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4"
+          >
             Burger
-          </ul>
+          </Link>
           <ul className="md:flex hidden  hover:text-white hover:cursor-pointer space-x-4">
             Ev Hizmetleri
           </ul>

@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "sunflower-antd";
-import { Checkbox, Form, Input } from "antd";
-import { AlertFilled, UserOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useLoaderData } from "@remix-run/react";
+import { Form, Rate } from "antd";
+import { useLoaderData, useNavigate, useOutletContext } from "@remix-run/react";
 import { userPrefs } from "./../../hooks/cookie";
-import { BsGeoAltFill, BsThreeDots } from "react-icons/bs";
+import {
+  BsGeoAltFill,
+  BsThreeDots,
+  BsHeart,
+  BsBookmark,
+  BsCalendar,
+  BsCursor,
+  BsAspectRatio
+} from "react-icons/bs";
 import SwiperProfile from "~/components/SwiperProfile";
+
 
 export const loader = async () => {
   const data = {
@@ -19,10 +25,16 @@ export const loader = async () => {
 };
 
 const uyelik = () => {
+  const [existUser,handleChange] = useOutletContext();
   const [form] = Form.useForm();
   let navigate = useNavigate();
   const { API, API_KEY } = useLoaderData();
-  
+
+  useEffect(() => { 
+    // console.log(existUser);
+    // !existUser && navigate("/");
+  }, []);
+
   const login = async (username, password) => {
     await fetch(API + "/User/login", {
       method: "POST",
@@ -97,17 +109,141 @@ const uyelik = () => {
       </div>
 
       <div className="flex mt-5 space-x-5">
-        <div className="w-1/4 p-4 bg-white">01</div>
-        <div className="w-2/4">
-          <div className="bg-white w-full h-full">
-            <div className="p-6">BAŞLIK</div>
-            <div className="relative">
-              <SwiperProfile/>
+        <div className="w-1/4">
+          <div className="p-4 bg-white">
+            <div className="pt-2 font-semibold text-gray-500 space-y-2">
+              <span className="flex items-center bg-gray-100 p-2 rounded-lg">
+                <BsCalendar className="text-gray-500 mr-2 text-lg" />
+                Profil
+              </span>
+              <span className="flex items-center p-2 rounded-lg">
+                <BsCursor className="text-gray-500 mr-2 text-lg" />
+                İncelemeler
+              </span>
+              <span className="flex items-center p-2 rounded-lg">
+                <BsAspectRatio className="text-gray-500 mr-2 text-lg" />
+                Fotoğraflar
+              </span>
             </div>
-            <div className="p-6">BAŞLIK</div>
           </div>
         </div>
-        <div className="w-1/4 h-14 bg-white">03</div>
+        <div className="w-2/4 space-y-4">
+          <div className="bg-white w-full">
+            <div className="p-4">
+              <div className="flex gap-x-3">
+                <img
+                  className="w-16 h-16 rounded-lg"
+                  src="https://media-cdn.tripadvisor.com/media/photo-s/24/e8/fe/a3/oztat-kebap.jpg"
+                />
+                <div className="flex-col flex">
+                  <span className="text-blue-500">Yahyabey Kebap Pide</span>
+                  <span className="text-xs flex items-center">
+                    <BsGeoAltFill className="text-gray-500 mr-1" /> Alanya,
+                    Türkiye
+                  </span>
+                  <span className="text-xs pt-2 text-gray-400">
+                    22.08.2023 tarihinde yorum yapıldı.
+                  </span>
+                </div>
+              </div>
+              <div className="pt-2">
+                <Rate
+                  className="text-[15px] text-red-500 font-bold"
+                  disabled
+                  defaultValue={4}
+                />
+              </div>
+              <div className="pt-1">
+                Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek
+                yedik turizm bölgesi olduğu için bildiğiniz gibi insanların
+                önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın
+                tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde
+                çalışanları o kadar samimi sanki kendi evinizdeymis gibi his
+                ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en
+                güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil
+                geçirmek için mutlaka öz tat restorantti görmenizi öneririm
+              </div>
+            </div>
+            <div className="relative">
+              <SwiperProfile />
+            </div>
+            <div className="p-4 flex items-center gap-x-3 text-xs">
+              <button className="flex items-center gap-x-1 hover:text-red-500">
+                <BsHeart />
+                Beğen
+              </button>
+              <button className="flex items-center gap-x-1 hover:text-red-500">
+                <BsBookmark />
+                Kaydet
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white w-full">
+            <div className="p-4">
+              <div className="flex gap-x-3">
+                <img
+                  className="w-16 h-16 rounded-lg"
+                  src="https://media-cdn.tripadvisor.com/media/photo-s/24/e8/fe/a3/oztat-kebap.jpg"
+                />
+                <div className="flex-col flex">
+                  <span className="text-blue-500">Yahyabey Kebap Pide</span>
+                  <span className="text-xs flex items-center">
+                    <BsGeoAltFill className="text-gray-500 mr-1" /> Alanya,
+                    Türkiye
+                  </span>
+                  <span className="text-xs pt-2 text-gray-400">
+                    22.08.2023 tarihinde yorum yapıldı.
+                  </span>
+                </div>
+              </div>
+              <div className="pt-2">
+                <Rate
+                  className="text-[15px] text-red-500 font-bold"
+                  disabled
+                  defaultValue={4}
+                />
+              </div>
+              <div className="pt-1">
+                Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek
+                yedik turizm bölgesi olduğu için bildiğiniz gibi insanların
+                önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın
+                tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde
+                çalışanları o kadar samimi sanki kendi evinizdeymis gibi his
+                ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en
+                güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil
+                geçirmek için mutlaka öz tat restorantti görmenizi öneririm
+              </div>
+            </div>
+            <div className="relative">
+              <SwiperProfile />
+            </div>
+            <div className="p-4 flex items-center gap-x-3 text-xs">
+              <button className="flex items-center gap-x-1 hover:text-red-500">
+                <BsHeart />
+                Beğen
+              </button>
+              <button className="flex items-center gap-x-1 hover:text-red-500">
+                <BsBookmark />
+                Kaydet
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="w-1/4">
+          <div className="p-4 bg-white h-40">
+            <div className="text-xs text-gray-500 space-y-2">
+              <span className="flex items-center">
+                <BsCalendar className="text-gray-500 mr-1" />
+                22.08.2023 tarihinde katıldı.
+              </span>
+              <span className="flex items-center">
+                <BsGeoAltFill className="text-gray-500 mr-1" />
+                Osmangazi, Bursa
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
