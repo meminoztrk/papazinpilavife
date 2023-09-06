@@ -16,7 +16,8 @@ import { getUser, getJwt } from "~/hooks/cookie";
 export const loader = async ({ request }) => {
   const jwt = getJwt(request.headers.get("cookie"))
   const data = await getUser(jwt,process.env.REACT_APP_API,process.env.REACT_APP_API_KEY);
-  if(data.id){ return data }else{ return null}
+
+  if(data.userId){ return data }else{ return null}
 }
 
 
@@ -44,7 +45,7 @@ export default function IndexRoute() {
     <div>
       <Projection state={hidden}/>
       {openModal && <SearchModal closeModal={setOpenModal} />}
-      <Header data={data} existUser={existUser} openModal={setOpenModal} />
+      <Header data={data} existUser={existUser} handleChange={handleChange} openModal={setOpenModal}  />
       <div className='container pt-28 mx-auto xl:px-48 lg:px-12 px-2'>
         <Outlet context={[existUser,handleChange]} />
       </div>

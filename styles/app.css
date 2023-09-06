@@ -534,3 +534,38 @@ body {
   cursor: pointer;
   pointer-events:all !important;
 }
+
+.scrolling {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  overflow-y: auto;
+  position: relative;
+}
+
+.ant-picker-dropdown{
+  position: fixed !important;
+}
+
+.ant-select-dropdown{
+  position: fixed !important;
+}
+
+.ant-select-selector {
+  width: 100% !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-left: 40px !important;
+}
+
+.ant-select-selector .ant-select-selection-search {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-select-selector .ant-select-selection-search input {
+  height: 48px !important;
+  width: 100% !important;
+  padding-left: 30px !important;
+}

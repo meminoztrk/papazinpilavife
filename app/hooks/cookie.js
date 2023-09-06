@@ -13,8 +13,8 @@ export const getUserToken = () => {
     return Cookie.get("jwt")
 }
 
-export const removeToken = () => {
-    console.log("cokie desin")
+export const removeToken = (handleChange) => {
+    handleChange(null)
     Cookie.remove("jwt")
 }
 

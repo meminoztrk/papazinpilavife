@@ -1,40 +1,42 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   FaFacebookF,
   FaTwitter,
-  FaInstagram,
-  FaCaretRight,
-  FaCaretLeft,
+  FaInstagram
 } from "react-icons/fa";
 import {
   AiOutlineUser,
   AiOutlineUserAdd,
   AiOutlineSearch,
-  AiOutlineLoading,
   AiOutlineSwapRight,
   AiFillStar,
 } from "react-icons/ai";
-import { LoadingOutlined } from "@ant-design/icons";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { Popover, Spin, Button, Input, Select, Space } from "antd";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper";
-import { Link } from "@remix-run/react";
-import cities from "../data/Cities.json";
-import { getUserToken } from "../hooks/cookie";
-import seoHelp from "./../hooks/seoHelp";
-const { Search } = Input;
+import {
+  Popover,
+  Spin,
+  Button,
+  Input,
+  Select,
+  Space,
+  Dropdown,
+  Menu,
+} from "antd";
+import { Link, useNavigate } from "@remix-run/react";
+import { getUserToken, removeToken } from "../hooks/cookie"
+
+
+
 
 const vakitlerName = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 const date = new Date();
 
-export const Header = ({ openModal, data, existUser }) => {
+export const Header = ({ openModal, data, existUser, handleChange }) => {
   const [navbar, setNavbar] = useState(false);
   const [search, setSearch] = useState("");
   const [hidden, setHidden] = useState(true);
   const [provinces, setProvinces] = useState([]);
   let menuRef = useRef();
+  let navigate =  useNavigate();
   let start = new Date();
 
   const getSearchingProvince = async (value) => {
@@ -51,7 +53,6 @@ export const Header = ({ openModal, data, existUser }) => {
         setProvinces(data.data);
       });
   };
-
 
   const changeBackground = () => {
     if (window.scrollY >= 126) {
@@ -75,6 +76,13 @@ export const Header = ({ openModal, data, existUser }) => {
     window.addEventListener("scroll", changeBackground);
     return () => window.addEventListener("scroll", changeBackground);
   }, []);
+
+  const menu = (
+    <Menu className="w-40 mt-2">
+      <Menu.Item key="Recommend" onClick={()=>navigate(`profile?userid${existUser.userId}`)}>Profilim</Menu.Item>
+      <Menu.Item key="Newest" onClick={()=>{removeToken(handleChange);navigate("/")}}>Çıkış Yap</Menu.Item>
+    </Menu>
+  );
 
   return (
     <div className="fixed w-full top-0 z-40 font-inter">
@@ -133,22 +141,16 @@ export const Header = ({ openModal, data, existUser }) => {
                 </div>
               </>
             ) : (
-              <a href="/admin" className="flex items-center">
-                <AiOutlineUser
-                  size={19}
-                  className="cursor-pointer hover:text-gray-500"
-                />
-                <span className="pl-2">Hesabım</span>
-              </a>
+              <Dropdown overlay={menu} trigger={["hover"]}>
+                <button className="flex items-center">
+                  <AiOutlineUser
+                    size={19}
+                    className="cursor-pointer hover:text-gray-500"
+                  />
+                  <span className="pl-2">Hesabım</span>
+                </button>
+              </Dropdown>
             )}
-
-            {/* <div className="flex items-center py-[10px] px-4">
-              <AiOutlineSearch
-                size={19}
-                className="cursor-pointer hover:text-gray-500"
-                onClick={() => openModal(true)}
-              />
-            </div> */}
           </div>
         </div>
       </div>
@@ -173,27 +175,41 @@ export const Header = ({ openModal, data, existUser }) => {
                 <Input
                   className="w-80 h-12 px-4n"
                   placeholder="Konum"
-                  onChange={(e) => {setSearch(e.target.value); start=new Date();setTimeout(function(){if ((new Date() - start)>250) {getSearchingProvince(e.target.value);setHidden(false);}}, 250);} }  
-                  value={search}        
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    start = new Date();
+                    setTimeout(function () {
+                      if (new Date() - start > 250) {
+                        getSearchingProvince(e.target.value);
+                        setHidden(false);
+                      }
+                    }, 250);
+                  }}
+                  value={search}
                 />
                 <div
                   className={`top-12 w-full cursor-default absolute bg-white rounded-b-lg border py-4 p-2 ${
                     hidden ? "hidden" : "flex"
                   } flex-col`}
                 >
-                 
-                  {provinces.length > 0 ? provinces.map((x, i) => (
-                    <Link
-                      to={"/business"}
-                      key={i}
-                      className="hover:bg-gray-100 hover:text-black font-medium rounded-lg w-full p-2 flex items-center"
-                      onClick={()=>{setSearch(x.city);setHidden(true)}}
-                    >
-                       <AiOutlineSwapRight className="text-gray-400 mr-2"/>
-                      {x.city}
-                    </Link>
-                  )) :
-                  <span className="pb-10 text-gray-200">Konum girin</span>}
+                  {provinces.length > 0 ? (
+                    provinces.map((x, i) => (
+                      <Link
+                        to={"/business"}
+                        key={i}
+                        className="hover:bg-gray-100 hover:text-black font-medium rounded-lg w-full p-2 flex items-center"
+                        onClick={() => {
+                          setSearch(x.city);
+                          setHidden(true);
+                        }}
+                      >
+                        <AiOutlineSwapRight className="text-gray-400 mr-2" />
+                        {x.city}
+                      </Link>
+                    ))
+                  ) : (
+                    <span className="pb-10 text-gray-200">Konum girin</span>
+                  )}
                 </div>
               </div>
               <div className="bg-red-600 py-[14px] rounded-r-xl pl-3 pr-4 stroke-2">

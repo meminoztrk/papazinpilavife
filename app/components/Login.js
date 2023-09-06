@@ -38,7 +38,7 @@ const Login = () => {
         .then((response) => response.json())
         .then((data) => {
             data.statusCode == 400 && setError(data.errors);
-            data.statusCode == 201 && (handleChange(data.data), userPrefs(data.data.token), navigate("/profile"));
+            data.statusCode == 201 && (handleChange(data.data), userPrefs(data.data.token), navigate(`/profile?userid=${data.data.userId}`));
         });
     };
   
@@ -58,7 +58,7 @@ const Login = () => {
         .then((response) => response.json())
         .then((data) => {
             data.statusCode == 400 && setError(data.errors);
-            data.statusCode == 201 && (handleChange(data.data), userPrefs(data.data.token), navigate("/profile"));
+            data.statusCode == 201 && (handleChange(data.data), userPrefs(data.data.token), navigate(`/profile?userid=${data.data.userId}`));
         });
     };
   

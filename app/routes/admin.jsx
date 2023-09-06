@@ -35,7 +35,7 @@ function getItem(label, key, icon, children) {
 export const loader = async ({ request }) => {
   const jwt = getJwt(request.headers.get("cookie"))
   const data = await getUser(jwt,process.env.REACT_APP_API,process.env.REACT_APP_API_KEY);
-  if(data.id){ return data }else{ return redirect("/")}
+  if(data.userId){ return data }else{ return redirect("/")}
 }
 
 export default function Admin() {
