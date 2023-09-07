@@ -1,9 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram
-} from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import {
   AiOutlineUser,
   AiOutlineUserAdd,
@@ -22,10 +18,7 @@ import {
   Menu,
 } from "antd";
 import { Link, useNavigate } from "@remix-run/react";
-import { getUserToken, removeToken } from "../hooks/cookie"
-
-
-
+import { getUserToken, removeToken } from "../hooks/cookie";
 
 const vakitlerName = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 const date = new Date();
@@ -36,7 +29,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
   const [hidden, setHidden] = useState(true);
   const [provinces, setProvinces] = useState([]);
   let menuRef = useRef();
-  let navigate =  useNavigate();
+  let navigate = useNavigate();
   let start = new Date();
 
   const getSearchingProvince = async (value) => {
@@ -79,8 +72,21 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
 
   const menu = (
     <Menu className="w-40 mt-2">
-      <Menu.Item key="Recommend" onClick={()=>navigate(`profile?userid${existUser.userId}`)}>Profilim</Menu.Item>
-      <Menu.Item key="Newest" onClick={()=>{removeToken(handleChange);navigate("/")}}>Çıkış Yap</Menu.Item>
+      <Menu.Item
+        key="Recommend"
+        onClick={() => navigate(`profile?userid${existUser.userId}`)}
+      >
+        Profilim
+      </Menu.Item>
+      <Menu.Item
+        key="Newest"
+        onClick={() => {
+          navigate("/");
+          setTimeout(() => removeToken(handleChange), 500);
+        }}
+      >
+        Çıkış Yap
+      </Menu.Item>
     </Menu>
   );
 
@@ -130,26 +136,28 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
                   </Link>
                 </div>
 
-                <div className="flex items-center py-[10px] px-4">
+                {/* <div className="flex items-center py-[10px] px-4">
                   <Link to="/uyelik" className="flex items-center">
                     <AiOutlineUserAdd
                       size={19}
                       className="cursor-pointer hover:text-gray-500"
                     />
-                    <span className="pl-2">Kayıt Ol</span>
+                    <span className="pl-2">İşletme Hesabı Aç</span>
                   </Link>
-                </div>
+                </div> */}
               </>
             ) : (
-              <Dropdown overlay={menu} trigger={["hover"]}>
-                <button className="flex items-center">
-                  <AiOutlineUser
-                    size={19}
-                    className="cursor-pointer hover:text-gray-500"
-                  />
-                  <span className="pl-2">Hesabım</span>
-                </button>
-              </Dropdown>
+              <div>
+                <Dropdown transitionName="" overlay={menu} trigger={["click"]}>
+                  <button className="ml-4 hover:text-gray-500 flex items-center">
+                    <AiOutlineUser
+                      size={19}
+                      className="cursor-pointer"
+                    />
+                    <span className="pl-2">Hesabım</span>
+                  </button>
+                </Dropdown>
+              </div>
             )}
           </div>
         </div>

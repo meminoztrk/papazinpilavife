@@ -76,6 +76,7 @@ const getBase64 = (file) =>
 const profile = () => {
   const [existUser, handleChange] = useOutletContext();
   const [town, setTown] = useState([]);
+  const [location, setLocation] = useState("");
   const [form] = Form.useForm();
   let navigate = useNavigate();
   const { API, API_KEY, API_IMAGES } = useLoaderData();
@@ -87,14 +88,31 @@ const profile = () => {
 
   useEffect(() => {
     existUser &&
-      existUser.provinceId &&
-      setTown(
-        Province.filter(
-          (x) =>
-            x.ustID ===
-            Province.find((y) => y.id === existUser.provinceId).ustID
+      existUser.provinceId && (
+        setTown(
+          Province.filter(
+            (x) =>
+              x.ustID ===
+              Province.find((y) => y.id === existUser.provinceId).ustID
+          )
+        ),
+        setLocation(
+          fupper(
+            Province.find((y) => y.id === existUser.provinceId)
+              .sehirIlceMahalleAdi
+          ) +
+            ", " +
+            fupper(
+              Province.find(
+                (y) =>
+                  y.id ===
+                  Province.find((y) => y.id === existUser.provinceId).ustID
+              ).sehirIlceMahalleAdi
+            )
         )
-      );
+      )
+    
+      
     setFileList([
       {
         uid: "-1",
@@ -105,7 +123,23 @@ const profile = () => {
     ]);
   }, []);
 
-  
+  useEffect(() => {
+    existUser && existUser.provinceId &&
+      setLocation(
+        fupper(
+          Province.find((y) => y.id === existUser.provinceId)
+            .sehirIlceMahalleAdi
+        ) +
+          ", " +
+          fupper(
+            Province.find(
+              (y) =>
+                y.id ===
+                Province.find((y) => y.id === existUser.provinceId).ustID
+            ).sehirIlceMahalleAdi
+          )
+      );
+  }, [existUser]);
 
   const editUser = async (userdata) => {
     const formData = new FormData();
@@ -207,7 +241,7 @@ const profile = () => {
             </span>
             <span className="flex items-center">
               <BsGeoAltFill className="text-gray-500 mr-1" />
-              Osmangazi, Bursa
+              {location}
             </span>
             <div className="flex space-x-6 pt-6">
               <div className="flex flex-col">
@@ -288,7 +322,7 @@ const profile = () => {
                               .ustID
                         ).id,
                       provinceId: existUser && existUser.provinceId,
-                      dateOfBirth: existUser && moment(existUser.dateOfBirth),
+                      dateOfBirth: existUser && existUser.dateOfBirth && moment(existUser.dateOfBirth),
                     }}
                     autoComplete="off"
                   >
@@ -362,7 +396,7 @@ const profile = () => {
                       </Form.Item>
                     </div>
 
-                    <div className="flex items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 profileSelect">
                       <Form.Item className="mb-0 w-full">
                         <HomeOutlined
                           style={{ fontSize: "18px" }}
@@ -389,7 +423,7 @@ const profile = () => {
                             placeholder="İl seçin"
                             onSelect={(e) => {
                               setTown(Province.filter((x) => x.ustID == e));
-                              form.setFieldsValue({ provinceId: null })
+                              form.setFieldsValue({ provinceId: null });
                             }}
                             filterOption={(input, option) =>
                               (
@@ -497,12 +531,6 @@ const profile = () => {
 
                     <Form.Item
                       name="about"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: "Lütfen biraz kendinizden bahsedin!",
-                      //   },
-                      // ]}
                     >
                       <TextArea
                         rows={4}
@@ -511,81 +539,6 @@ const profile = () => {
                         className="relative shadow z-0 appearance-none border rounded-[2px] w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </Form.Item>
-
-                    {/* <Form.Item
-                      label="Soyad"
-                      name="surname"
-                      rules={[
-                        { required: true, message: "Lütfen soyad girin!" },
-                      ]}
-                    >
-                      <Input placeholder="Soyad girin" />
-                    </Form.Item>
-                    <Form.Item
-                      label="Kullanıcı Adı"
-                      name="username"
-                      rules={[
-                        { required: true, message: "Lütfen kulalnıcı girin!" },
-                      ]}
-                    >
-                      <Input placeholder="Kullanıcı adı girin" />
-                    </Form.Item>
-                    <Form.Item
-                      label="Şifre"
-                      name="password"
-                      rules={[
-                        { required: true, message: "Lütfen telefon girin!" },
-                      ]}
-                    >
-                      <Input.Password placeholder="Şifre girin" />
-                    </Form.Item>
-                    <Form.Item
-                      label="E-Posta"
-                      name="email"
-                      rules={[
-                        { required: true, message: "Lütfen e-posta girin!" },
-                      ]}
-                    >
-                      <Input placeholder="E-posta girin" />
-                    </Form.Item>
-                    <Form.Item
-                      label="Telefon"
-                      name="phone"
-                      rules={[
-                        { required: true, message: "Lütfen telefon girin!" },
-                      ]}
-                    >
-                      <Input placeholder="Telefon girin" />
-                    </Form.Item>
-                    <Form.Item
-                      label="Rol"
-                      name="isAdmin"
-                      rules={[{ required: true, message: "Lütfen rol seçin!" }]}
-                    >
-                      <Select
-                        // showSearch
-                        className="w-48"
-                        placeholder="Rol seçin"
-                        optionFilterProp="children"
-                        // filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-                      >
-                        <Option className="font-poppins" value={true}>
-                          Admin
-                        </Option>
-                        <Option value={false}>Yazar</Option>
-                      </Select>
-                    </Form.Item>
-                    <Form.Item
-                      name="isActive"
-                      label="Aktif"
-                      valuePropName="checked"
-                      initialValue
-                    >
-                      <Switch
-                        checkedChildren="Aktif"
-                        unCheckedChildren="Pasif"
-                      />
-                    </Form.Item> */}
                   </Form>
                 </Spin>
               </Modal>
