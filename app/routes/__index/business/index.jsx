@@ -162,7 +162,7 @@ const BusinessIndex = () => {
                 <div className="flex w-2/3 flex-col flex-wrap divide-y">
                   <div className="py-4">
                     <h2 className="text-base py-2 font-semibold">
-                      Mutfak Türü
+                      Yemek Çeşitleri
                     </h2>
                     <div className="flex flex-wrap">
                       <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
@@ -189,16 +189,7 @@ const BusinessIndex = () => {
                     </h2>
                     <div className="flex flex-wrap">
                       <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
-                        Gel Al
-                      </span>
-                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
                         Kahvaltı
-                      </span>
-                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
-                        Paket Servis
-                      </span>
-                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
-                        Ücretsiz Wi-Fi
                       </span>
                       <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
                         TV
@@ -211,6 +202,23 @@ const BusinessIndex = () => {
                       </span>
                       <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
                         Aile
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="py-4">
+                    <h2 className="text-base py-2 font-semibold">
+                      İşletme Hizmetleri
+                    </h2>
+                    <div className="flex flex-wrap">
+                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
+                        Gel Al
+                      </span>
+                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
+                        Paket Servis
+                      </span>
+                      <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
+                        Ücretsiz Wi-Fi
                       </span>
                       <span className="p-2 mr-2 my-1 border rounded-xl border-gray-400 text-red-400">
                         Otopark
@@ -665,13 +673,10 @@ const BusinessIndex = () => {
             <div className="sticky top-16 mt-10 rounded-lg border shadow-lg pb-10">
               <div>
                 <iframe
-                  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=tr&amp;q=40.24400805442096,%2028.995192993784467+(Your%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3045.7212382339303!2d28.974800376541495!3d40.23749987146894!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca144295b039ef%3A0xe97f54f5c2e67b61!2sYahyabey%20Pide%20Kebap!5e0!3m2!1str!2sus!4v1694250663970!5m2!1str!2sus"
                   width="100%"
                   height="250px"
                   style={{ borderRadius: "0.5rem" }}
-                  frameBorder="0"
-                  marginHeight="0"
-                  marginWidth="0"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>

@@ -2,10 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import {
   AiOutlineUser,
-  AiOutlineUserAdd,
+  AiOutlineLogout,
   AiOutlineSearch,
   AiOutlineSwapRight,
   AiFillStar,
+  AiOutlineSetting,
+  AiOutlineShop,
+  AiOutlineProfile
 } from "react-icons/ai";
 import {
   Popover,
@@ -19,6 +22,7 @@ import {
 } from "antd";
 import { Link, useNavigate } from "@remix-run/react";
 import { getUserToken, removeToken } from "../hooks/cookie";
+import logo from "public/pngegg.png"
 
 const vakitlerName = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 const date = new Date();
@@ -74,9 +78,31 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
     <Menu className="w-40 mt-2">
       <Menu.Item
         key="Recommend"
-        onClick={() => navigate(`profile?userid${existUser.userId}`)}
+        onClick={() =>
+          navigate(existUser &&
+            existUser.isBusiness
+              ? "/profilebusiness"
+              : `profile?userid${existUser.userId}`
+          )
+        }
       >
-        Profilim
+        {existUser && existUser.isBusiness ? (
+          <div className="flex items-center space-x-2">
+            <AiOutlineShop size={16} />
+            <span>İşletmem</span>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <AiOutlineProfile size={16} />
+            <span>Profilim</span>
+          </div>
+        )}
+      </Menu.Item>
+      <Menu.Item key="Newestss">
+        <div className="flex items-center space-x-2">
+          <AiOutlineSetting size={16} />
+          <span>Ayarlar</span>
+        </div>
       </Menu.Item>
       <Menu.Item
         key="Newest"
@@ -85,7 +111,10 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
           setTimeout(() => removeToken(handleChange), 500);
         }}
       >
-        Çıkış Yap
+        <div className="flex items-center space-x-2">
+          <AiOutlineLogout size={16} />
+          <span>Çıkış Yap</span>
+        </div>
       </Menu.Item>
     </Menu>
   );
@@ -105,7 +134,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
               <img
                 alt="logo"
                 className="object-cover"
-                src="https://seeklogo.com/images/L/logo-com-hr-logo-5636A4D2D5-seeklogo.com.png"
+                src={logo}
               />
             </Link>
           </div>
@@ -150,10 +179,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
               <div>
                 <Dropdown transitionName="" overlay={menu} trigger={["click"]}>
                   <button className="ml-4 hover:text-gray-500 flex items-center">
-                    <AiOutlineUser
-                      size={19}
-                      className="cursor-pointer"
-                    />
+                    <AiOutlineUser size={19} className="cursor-pointer" />
                     <span className="pl-2">Hesabım</span>
                   </button>
                 </Dropdown>

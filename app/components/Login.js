@@ -58,7 +58,7 @@ const Login = () => {
         .then((response) => response.json())
         .then((data) => {
             data.statusCode == 400 && setError(data.errors);
-            data.statusCode == 201 && (handleChange(data.data), userPrefs(data.data.token), navigate(`/profile?userid=${data.data.userId}`));
+            data.statusCode == 201 && (handleChange(data.data), userPrefs(data.data.token), navigate(data.data.isBusiness ? "/profilebusiness" : `/profile?userid=${data.data.userId}`));
         });
     };
   
@@ -81,7 +81,7 @@ const Login = () => {
         </div>
       </div>
       <div className="px-4 py-2 bg-gray-50 flex items-center">
-        <AlertFilled className="pr-4" /> Hesabınız varsa giriş yapın
+        <AlertFilled className="pr-4" /> Kişisel hesabınız veya işletme hesabınız varsa giriş yapın
       </div>
       <div className="px-6 py-6">
         <Form

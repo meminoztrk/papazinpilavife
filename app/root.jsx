@@ -29,11 +29,11 @@ export function links() {
     { rel: "stylesheet", href: swipersb },
     { rel: "stylesheet", href: nProgressStyles },
     { rel: "stylesheet", href: styles },
-    {
-      rel: "icon",
-      href: "https://icon-library.com/images/red-icon-png/red-icon-png-14.jpg",
-      type: "image/png",
-    },
+    // {
+    //   rel: "icon",
+    //   href: "https://icon-library.com/images/red-icon-png/red-icon-png-14.jpg",
+    //   type: "image/png",
+    // },
   ];
 }
 

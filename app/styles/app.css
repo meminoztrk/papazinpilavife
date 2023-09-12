@@ -2546,10 +2546,6 @@ body {
   position: fixed !important;
 }
 
-.profileSelect .ant-select-dropdown{
-  position: fixed !important;
-}
-
 .profileSelect .ant-select-selector {
   width: 100% !important;
   height: 48px !important;
@@ -2567,6 +2563,31 @@ body {
   height: 48px !important;
   width: 100% !important;
   padding-left: 30px !important;
+}
+
+.userNav .ant-menu-item:after, .ant-menu-vertical-left .ant-menu-item:after, .ant-menu-vertical-right .ant-menu-item:after, .ant-menu-vertical .ant-menu-item:after {
+  border-right: 3px solid rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.userNav .ant-menu-item:hover, .ant-menu-item a:hover, .ant-menu-vertical-left .ant-menu-item:after, .ant-menu-vertical-right .ant-menu-item:after, .ant-menu-vertical .ant-menu-item:after {
+  color:rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.userNav:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #ffdcdc;
+}
+
+.ant-menu-item-selected, .ant-menu-item-selected a, .ant-menu-item-selected a:hover {
+  color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.tagsInput .ant-select-selector .ant-select-selection-search input {
+  height: 48px !important;
+}
+
+.tagsInput .ant-select-selection-item {
+  background-color: rgb(255, 150, 150) !important;
+  color: white !important;
 }
 
 .before\:absolute::before{

@@ -48,7 +48,7 @@ export const loader = async ({ request }) => {
     process.env.REACT_APP_API_KEY
   );
 
-  if (!user.userId) {
+  if (!user.userId || (user.userId && user.isBusiness)) {
     return redirect("/uyelik");
   }
   if (!param) {
@@ -122,6 +122,10 @@ const profile = () => {
       },
     ]);
   }, []);
+
+  const empty = (text) => {
+    return text == null ? "" : text
+  }
 
   useEffect(() => {
     existUser && existUser.provinceId &&
@@ -237,7 +241,7 @@ const profile = () => {
           </div>
           <div className="flex flex-col">
             <span className=" font-black text-2xl">
-              {existUser && existUser.name + " " + existUser.surname}
+              {existUser && empty(existUser.name) + " " + empty(existUser.surname)}
             </span>
             <span className="flex items-center">
               <BsGeoAltFill className="text-gray-500 mr-1" />
@@ -413,13 +417,14 @@ const profile = () => {
                         >
                           <Select
                             showSearch
+                            getPopupContainer={trigger => trigger.parentNode}
                             notFoundContent={
                               <Empty
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                                 description={"İl Bulunamadı"}
                               />
                             }
-                            className="shadow z-0 text-gray-700 leading-tight"
+                            className="shadow z-60 text-gray-700 leading-tight"
                             placeholder="İl seçin"
                             onSelect={(e) => {
                               setTown(Province.filter((x) => x.ustID == e));
@@ -469,14 +474,14 @@ const profile = () => {
                         >
                           <Select
                             showSearch
-                            form={form}
+                            getPopupContainer={trigger => trigger.parentNode}
                             notFoundContent={
                               <Empty
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                                 description={"İlçe Bulunamadı"}
                               />
                             }
-                            className="shadow z-0 text-gray-700 leading-tight"
+                            className="shadow z-60 text-gray-700 leading-tight"
                             placeholder="İl seçin"
                             filterOption={(input, option) =>
                               (

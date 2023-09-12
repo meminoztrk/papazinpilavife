@@ -41,7 +41,7 @@ const RegisterBusiness = () => {
       .then((data) => {
         console.log(data)
         data.statusCode == 400 && setError(data.errors);
-        data.statusCode == 201 && (close(),handleChange(data.data), userPrefs(data.data.token), navigate(`/business`));
+        data.statusCode == 201 && (close(),handleChange(data.data), userPrefs(data.data.token), navigate(`/profilebusiness`));
       });
   };
 
@@ -66,10 +66,6 @@ const RegisterBusiness = () => {
     },
     form,
   });
-
-  useEffect(() => {
-    show();
-  }, []);
 
   return (
     <>
