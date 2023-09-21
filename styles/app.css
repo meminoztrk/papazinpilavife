@@ -593,3 +593,18 @@ body {
   color: white !important;
 }
 
+.ant-picker-range-separator {
+  padding: 0 !important;
+}
+
+.ant-picker-separator {
+  height: 0 !important;
+  font-size: 12px;
+}
+
+.pickerInput .ant-picker-input input {
+  text-align: center !important;
+}
+
+.ant-table table { font-size: 12px; }
+

@@ -83,7 +83,7 @@ const ProfileBusiness = () => {
           <Layout className="bg-white">
             <Content style={{ margin: "0 0px" }}>
               <div style={{ padding: 20, minHeight: 360 }}>
-                <Outlet />
+                <Outlet context={[existUser,handleChange]} />            
               </div>
             </Content>
           </Layout>
