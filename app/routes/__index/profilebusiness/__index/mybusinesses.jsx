@@ -148,10 +148,10 @@ const mybusinesses = () => {
         console.log(data.data);
         setTown(Province.filter((x) => x.ustID == data.data.city));
         getDistrict(data.data.cities);
-
+        data.data.businessType == "Restoran" ? setFoodType(true) : setFoodType(false);
         setFileList(
-          data.data.businessImages.map((x) => ({
-            uid: "-1",
+          data.data.businessImages.map((x,index) => ({
+            uid: index,
             name: x,
             status: "done",
             url: API_IMAGES + "business/" + x,
@@ -178,8 +178,21 @@ const mybusinesses = () => {
           phone: data.data.phone,
           mapIframe: data.data.mapIframe,
           website: data.data.website,
-
-
+          foodTypes: splitItem(data.data.foodTypes),
+          businessProps: splitItem(data.data.businessProps),
+          businessServices: splitItem(data.data.businessServices),
+          commentTypes: splitItem(data.data.commentTypes),
+          mo: stringToTime(data.data.mo),
+          tu: stringToTime(data.data.tu),
+          we: stringToTime(data.data.we),
+          th: stringToTime(data.data.th),
+          fr: stringToTime(data.data.fr),
+          sa: stringToTime(data.data.sa),
+          su: stringToTime(data.data.su),
+          about: data.data.about,
+          facebook: data.data.facebook,
+          instagram: data.data.instagram,
+          twitter: data.data.twitter
         });
         show();
       });
@@ -188,16 +201,16 @@ const mybusinesses = () => {
   const postBusiness = async (buss) => {
     const formData = new FormData();
     for (var key in buss) {
-      formData.append(key, buss[key]);
+      formData.append(key, buss[key] == null ? "" : buss[key]);
     }
-    fileList[0] &&
-      fileList.forEach((item) => {
-        formData.append("uploadedImages", item.originFileObj);
+    images[0] &&
+    images.forEach((item) => {
+        formData.append("uploadedImages", item);
       });
 
-    license[0] &&
-      license.forEach((item) => {
-        formData.append("uploadedLicense", item.originFileObj);
+    limage[0] &&
+    limage.forEach((item) => {
+        formData.append("uploadedLicense", item);
       });
 
     await post(API + "/Business/", formData, {
@@ -206,7 +219,35 @@ const mybusinesses = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((resp) => console.log(resp))
+      .then((resp) => getBusinesses())
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const putBusiness = async (buss) => {
+    const formData = new FormData();
+    for (var key in buss) {
+      formData.append(key, buss[key] == null ? "" : buss[key]);
+    }
+    images[0] &&
+    images.forEach((item) => {  
+        formData.append("uploadedImages", item);
+      });
+
+    limage[0] &&
+    limage.forEach((item) => {
+        formData.append("uploadedLicense", item);
+      });
+
+
+    await put(API + "/Business/?id=" + editId, formData, {
+      headers: {
+        ApiKey: API_KEY,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => getBusinesses())
       .catch(function (error) {
         console.log(error);
       });
@@ -246,11 +287,13 @@ const mybusinesses = () => {
   }
 
   useEffect(() => {
-    setImages(fetchUrlToImage(fileList, "business"));
+    fetchUrlToImage(fileList, "business")
+      .then(files=>setImages(files));
   }, [fileList]);
 
   useEffect(() => {
-    setLimage(fetchUrlToImage(license, "license"));
+    fetchUrlToImage(license, "license")
+      .then(files=>setLimage(files));
   }, [license]);
 
   const handleCancel = () => setPreviewVisible(false);
@@ -386,7 +429,7 @@ const mybusinesses = () => {
       render: (text, record) => (
         <div className="w-20">
           <img
-            src={API_IMAGES + "business/thumbnail" + text}
+            src={text == null ? API_IMAGES + "business/defaultbusiness.png" : API_IMAGES + "business/thumbnail" + text}
             alt="..."
             className="w-20 h-16 object-cover  shadow rounded-lg align-middle border-none"
           />
@@ -494,6 +537,19 @@ const mybusinesses = () => {
       : "";
   };
 
+  const stringToTime = (time) => {
+    var array = time.split(" - ");
+    return [moment(`01/01/2023 ${array[0]}`,"MM/DD/YYYY HH:mm"), moment(`01/01/2023 ${array[1]}`,"MM/DD/YYYY HH:mm")]
+  };
+
+  const splitItem = (text) => {
+    return text != null ? text.split(",,") : null;
+  };
+
+  const joinItem = (text) => {
+    return text != null ? text.join(",,") : null;
+  };
+
   const {
     modalProps,
     formProps,
@@ -503,15 +559,15 @@ const mybusinesses = () => {
     // formResult,
   } = useModalForm({
     defaultVisible: false,
-    // autoSubmitClose: true,
-    // autoResetForm: true,
+    autoSubmitClose: true,
+    autoResetForm: true,
     async submit(businessData) {
       businessData = {
         ...businessData,
-        foodTypes: businessData.foodTypes.join(",,"),
-        businessProps: businessData.businessProps.join(",,"),
-        businessServices: businessData.businessServices.join(",,"),
-        commentTypes: businessData.commentTypes.join(",,"),
+        foodTypes: joinItem(businessData.foodTypes),
+        businessProps: joinItem(businessData.businessProps),
+        businessServices: joinItem(businessData.businessServices),
+        commentTypes: joinItem(businessData.commentTypes),
         mo: timeToString(businessData.mo),
         tu: timeToString(businessData.tu),
         we: timeToString(businessData.we),
@@ -523,8 +579,8 @@ const mybusinesses = () => {
       };
       // setOkButton(true);
 
-      postBusiness(businessData);
-      console.log(businessData);
+      ispost ? postBusiness(businessData) : putBusiness(businessData);
+      // console.log(businessData);
       return "ok";
     },
     form,
@@ -542,6 +598,7 @@ const mybusinesses = () => {
           <button
             className="bg-red-500 rounded-md hover:bg-red-700 text-white p-2 flex items-center space-x-1"
             onClick={() => {
+              setIsPost(true);
               show();
               form.resetFields();
               setFileList([]);
@@ -605,7 +662,7 @@ const mybusinesses = () => {
                   <h2 className="font-medium my-1">İşletme Fotoğrafları</h2>
                   <Form.Item name="upload" valuePropName="file">
                     <Upload
-                      name="logo"
+                      name="imagesOfBusiness"
                       beforeUpload={() => false}
                       onPreview={handleImagePreview}
                       onChange={handleImageChange}
@@ -1084,7 +1141,7 @@ const mybusinesses = () => {
                     </span>
                   </h2>
                   <Form.Item
-                    name="businessLicense"
+                    name="license"
                     valuePropName="file"
                     rules={[
                       {
