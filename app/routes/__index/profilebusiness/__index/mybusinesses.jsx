@@ -253,6 +253,39 @@ const mybusinesses = () => {
       });
   };
 
+  const patchIsActive = async (id, isActive) => {
+    await fetch(API + `/Business/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'ApiKey': API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([{ path: "isActive", value: isActive }])
+    }).catch(function (err) {
+      console.info(err);
+    });
+  }
+
+  const patchIsDeleted = async (id) => {
+    await fetch(API + `/Business/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'ApiKey': API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([{ path: "isDeleted", value: true }])
+    })
+      .then(response => {
+        if (response.ok) {
+          setDeleteForm({ visible: false })
+          getBusinesses();
+        }
+      })
+      .catch(function (err) {
+        console.info(err);
+      });
+  }
+
   const content = (
     <div className="flex justify-center w-[1000px]">
       <img className="w-[calc(100%)]" src={mapgif} alt="" />
@@ -494,7 +527,7 @@ const mybusinesses = () => {
           {...(record.isActive
             ? { defaultChecked: true }
             : { defaultChecked: false })}
-          onChange={(e) => setActive(record.id, e)}
+          onChange={(e) => patchIsActive(record.id, e)}
           checkedChildren="Aktif"
           unCheckedChildren="Pasif"
         />
@@ -1544,7 +1577,7 @@ const mybusinesses = () => {
           className="font-poppins"
           title="Silme İşlemi"
           visible={deleteForm.visible}
-          // onOk={() => setDeleted(deleteForm.deleteId)}
+          onOk={() => patchIsDeleted(deleteForm.deleteId)}
           onCancel={() => setDeleteForm({ visible: false })}
           okText="Evet"
           cancelText="Hayır"

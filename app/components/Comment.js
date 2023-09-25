@@ -45,6 +45,7 @@ const Comment = ({
             <Rate
               className="text-[13px] text-red-500 font-bold"
               disabled
+              allowHalf 
               defaultValue={4}
             />
             <span className="text-[9px]">07.08.2023</span>
