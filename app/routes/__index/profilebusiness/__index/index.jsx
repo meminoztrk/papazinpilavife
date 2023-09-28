@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import LoginModal from "~/components/LoginModal";
+
 
 const index = () => {
   const [text, setText] = useState("");

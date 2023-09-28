@@ -5,6 +5,8 @@ import { AiFillStar, AiFillShop, AiOutlinePushpin } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { Collapse } from "react-collapse";
 import Comment from "~/components/Comment";
+import seoHelp from "~/hooks/seoHelp";
+
 
 // export const loader = async ({ request }) => {
 //   const req = await fetch(process.env.REACT_APP_API + "/Common/GetAllBlog", {
@@ -41,7 +43,7 @@ export default function IndexRoute() {
 
           <div className="col-span-1 grid grid-cols-2 justify-center content-center bg-white shadow-xl rounded-lg p-2 pb-32">
             <div className="p-1">
-              <Link to={"/business"}>
+              <Link to={`/isletme/${seoHelp("Yahyabey Kebap Pide")}-${18}`}>
                 <div className="hover:shadow-lg hover:cursor-pointer rounded-lg p-2">
                   <img
                     className="aspect-square w-full rounded-lg object-cover"
@@ -295,7 +297,7 @@ export default function IndexRoute() {
               </div>
             </div>
 
-            <Comment content="Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek yedik turizm bölgesi olduğu için bildiğiniz gibi insanların önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde çalışanları o kadar samimi sanki kendi evinizdeymis gibi his ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil geçirmek için mutlaka öz tat restorantti görmenizi öneririm." />
+            {/* <Comment content="Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek yedik turizm bölgesi olduğu için bildiğiniz gibi insanların önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde çalışanları o kadar samimi sanki kendi evinizdeymis gibi his ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil geçirmek için mutlaka öz tat restorantti görmenizi öneririm." /> */}
           </div>
         </div>
       </div>

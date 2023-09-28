@@ -1,23 +1,22 @@
 import { useState } from "react";
 import { Rate } from "antd";
-import { Collapse } from "react-collapse";
 import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
+import moment from "moment";
+
 
 const Comment = ({
-  img,
-  content = "",
-  rating,
-  busspics,
-  bussname,
+  data,
+  imagePath,
+  busName,
   border = true,
   cAvaible = false,
 }) => {
   const [collap, setCollap] = useState(false);
 
   const contentless =
-    content && content.length > 200
-      ? content.substring(0, 200) + "..."
-      : content;
+    data.comment && data.comment.length > 300
+      ? data.comment.substring(0, 300) + "..."
+      : data.comment;
 
   return (
     <div
@@ -29,33 +28,34 @@ const Comment = ({
         <div className="rounded-full h-16 w-16">
           <img
             className="rounded-full"
-            src="https://s3-media0.fl.yelpcdn.com/photo/tsvlqX3iUJEK0360ksMFew/ls.jpg"
+            src={`${imagePath}/user/thumbnail${data.userImage}`}
+            alt={data.userImage}
           />
         </div>
-        <span className="font-semibold">Kay A.</span>
-        <span className="block text-[10px]">4 yorum</span>
+        <span className="font-semibold">{data.name} {data.surname[0]}.</span>
+        <span className="block text-[10px]">{data.totalComment} yorum</span>
       </div>
 
       <div className="col-span-4">
         <div className="flex flex-wrap flex-col p-2">
           <div className="flex items-center space-x-4">
             <span className="font-semibold text-base">
-              Kitap Evi Restaurant
+              {busName}
             </span>
             <Rate
               className="text-[13px] text-red-500 font-bold"
               disabled
               allowHalf 
-              defaultValue={4}
+              defaultValue={data.rate}
             />
-            <span className="text-[9px]">07.08.2023</span>
+            <span className="text-[10px]">{moment(data.created).format("DD.MM.yyyy")}</span>
           </div>
           <span className="text-sm ">
             <span className={`${collap ? "hidden" : ""}`}>{contentless}</span>
-            <span className={`${collap ? "" : "hidden"}`}>{content}</span>
+            <span className={`${collap ? "" : "hidden"}`}>{data.comment}</span>
             <span
               className={`text-blue-500 ${
-                content && content.length > 200 ? "" : "hidden"
+                data.comment && data.comment.length > 200 ? "" : "hidden"
               } hover:cursor-pointer hover:text-blue-400`}
               onClick={() => setCollap((prev) => !prev)}
             >
@@ -64,18 +64,14 @@ const Comment = ({
           </span>
 
           <div className="flex flex-wrap space-x-2 items-center py-4">
-            <img
+            {data.images.map((x,i) => (
+              <img
+              key={i}
               className="aspect-square w-20 rounded object-cover"
-              src="https://media-cdn.tripadvisor.com/media/photo-l/1d/91/9d/2a/ben-cok-begendim-herkese.jpg"
+              src={`${imagePath}/business/${x}`}
+              alt={x}
             />
-            <img
-              className="aspect-square w-20 rounded object-cover"
-              src="https://media-cdn.tripadvisor.com/media/photo-l/1d/c9/3a/03/caption.jpg"
-            />
-            <img
-              className="aspect-square w-20 rounded object-cover"
-              src="https://media-cdn.tripadvisor.com/media/photo-l/1d/c9/3a/04/caption.jpg"
-            />
+            ))}
           </div>
           {cAvaible && (
             <div className="flex items-center justify-start space-x-2">

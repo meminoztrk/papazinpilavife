@@ -269,7 +269,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
             Popüler
           </Link>
           <Link
-            to={"/business"}
+            to={"/isletme/yahyabey-kebap-pide-18"}
             className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4"
           >
             Restoran
