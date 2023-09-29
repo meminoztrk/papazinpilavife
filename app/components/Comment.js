@@ -46,7 +46,8 @@ const Comment = ({
               className="text-[13px] text-red-500 font-bold"
               disabled
               allowHalf 
-              defaultValue={data.rate}
+              value={data.rate}
+              defaultValue={0}
             />
             <span className="text-[10px]">{moment(data.created).format("DD.MM.yyyy")}</span>
           </div>

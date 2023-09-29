@@ -81,11 +81,14 @@ const Business = () => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [paginationLoading, setPaginationLoading] = useState(false);
   const [formPagination, setFormPagination] = useState({
     order: false,
     type: "",
     rate: 0,
+    page:1,
     search: "",
+    currentPage: 1,
   });
 
   const postComment = async (comment) => {
@@ -119,7 +122,9 @@ const Business = () => {
       API +
         `/Business/GetCommentWithPagination?id=${
           data.id
-        }&page=${1}&take=${5}&isAsc=${ent.order}&commentType=${ent.type}&rate=${ent.rate}&search=${ent.search}`,
+        }&page=${ent.currentPage}&take=${1}&isAsc=${ent.order}&commentType=${ent.type}&rate=${
+          ent.rate
+        }&search=${ent.search}`,
       {
         method: "GET",
         headers: {
@@ -130,18 +135,19 @@ const Business = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.data);
+        console.log("sayfa yüklenirken geldi", data.data);
         setComments(data.data);
+        setPaginationLoading(false);
       });
   };
 
   useEffect(() => {
-    console.log("ahaburda", formPagination);
-    getPaginationComment(formPagination);
+    setPaginationLoading(true);
+    const timer = setTimeout(async () => await getPaginationComment(formPagination), 500);
+    return () => clearTimeout(timer);
   }, [formPagination]);
 
   useEffect(() => {
-    setComments(data.businessComments);
     isIframeValidHTML(data.mapIframe);
   }, []);
 
@@ -990,7 +996,7 @@ const Business = () => {
                         allowHalf
                       />
                       <span className="text-left font-light">
-                        {data.businessComments.length} İnceleme
+                        {data.commentCount} İnceleme
                       </span>
                     </div>
                   </div>
@@ -1038,141 +1044,148 @@ const Business = () => {
                   </div>
                 </div>
               </div>
-
-              <div>
-                <div className="flex items-center justify-between pt-6">
-                  <div className="space-x-4">
-                    <Select
-                      className="w-28"
-                      onChange={(e) => {
-                        setFormPagination({...formPagination,order:e});
-                      }}
-                      defaultValue={false}
-                      options={[
-                        {
-                          value: false,
-                          label: "En Yeni",
-                        },
-                        {
-                          value: true,
-                          label: "En Eski",
-                        },
-                      ]}
-                    />
-
-                    <Select
-                      className="w-28"
-                      onChange={(e) => {
-                        setFormPagination({...formPagination,type:e});
-                      }}
-                      defaultValue=""
-                      options={[
-                        {
-                          value: "",
-                          label: "Tümü",
-                        },
-                        {
-                          value: "Kalite",
-                          label: "Kalite",
-                        },
-                        {
-                          value: "Fiyat",
-                          label: "Fiyat",
-                        },
-                        {
-                          value: "Konum",
-                          label: "Konum",
-                        },
-                        {
-                          value: "Hizmet",
-                          label: "Hizmet",
-                        },
-                        {
-                          value: "Servis",
-                          label: "Servis",
-                        },
-                        {
-                          value: "Atmosfer",
-                          label: "Atmosfer",
-                        },
-                      ]}
-                    />
-
-                    <Select
-                      className="w-28"
-                      onChange={(e) => {
-                        setFormPagination({...formPagination,rate:e});
-                      }}
-                      defaultValue={0}
-                      options={[
-                        {
-                          value: 0,
-                          label: "Tümü",
-                        },
-                        {
-                          value: 5,
-                          label: "5 Yıldız",
-                        },
-                        {
-                          value: 4,
-                          label: "4 Yıldız",
-                        },
-                        {
-                          value: 3,
-                          label: "3 Yıldız",
-                        },
-                        {
-                          value: 2,
-                          label: "2 Yıldız",
-                        },
-                        {
-                          value: 1,
-                          label: "1 Yıldız",
-                        },
-                      ]}
-                    />
-                  </div>
-                  <div className="flex items-center">
-                    <Search
-                      onSearch={(e) => {
-                        setFormPagination({...formPagination,search:e});
-                      }}
-                      placeholder="Yorumlarda ara..."
-                      className="w-60"
-                    />
-                  </div>
-                </div>
-                {comments && comments.length > 0 ? (
-                  <div className="col-span-1 grid grid-cols-1 justify-center content-center bg-white pt-8 pb-32">
-                    {comments.map((x, i) => (
-                      <Comment
-                        key={i}
-                        data={x}
-                        busName={data.businessName}
-                        imagePath={IMAGES}
-                        cAvaible={true}
-                        border={false}
-                        content="Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek yedik turizm bölgesi olduğu için bildiğiniz gibi insanların önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde çalışanları o kadar samimi sanki kendi evinizdeymis gibi his ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil geçirmek için mutlaka öz tat restorantti görmenizi öneririm."
+              <Spin
+                spinning={paginationLoading}
+                indicator={<LoadingOutlined spin />}
+              >
+                <div>
+                  <div className="flex items-center justify-between pt-6">
+                    <div className="space-x-4">
+                      <Select
+                        className="w-28"
+                        onChange={(e) => {
+                          setFormPagination({ ...formPagination, order: e, currentPage: 1  });
+                        }}
+                        defaultValue={false}
+                        options={[
+                          {
+                            value: false,
+                            label: "En Yeni",
+                          },
+                          {
+                            value: true,
+                            label: "En Eski",
+                          },
+                        ]}
                       />
-                    ))}
-                    {data.commentCount && (
-                      <div className="flex justify-center py-10">
-                        <Pagination
-                          onChange={(e) => console.log(e)}
-                          defaultCurrent={1}
-                          total={data.commentCount}
-                          showSizeChanger={false}
-                          pageSize={1}
+
+                      <Select
+                        className="w-28"
+                        onChange={(e) => {
+                          setFormPagination({ ...formPagination, type: e, currentPage: 1 });
+                        }}
+                        defaultValue=""
+                        options={[
+                          {
+                            value: "",
+                            label: "Tümü",
+                          },
+                          {
+                            value: "Kalite",
+                            label: "Kalite",
+                          },
+                          {
+                            value: "Fiyat",
+                            label: "Fiyat",
+                          },
+                          {
+                            value: "Konum",
+                            label: "Konum",
+                          },
+                          {
+                            value: "Hizmet",
+                            label: "Hizmet",
+                          },
+                          {
+                            value: "Servis",
+                            label: "Servis",
+                          },
+                          {
+                            value: "Atmosfer",
+                            label: "Atmosfer",
+                          },
+                        ]}
+                      />
+
+                      <Select
+                        className="w-28"
+                        onChange={(e) => {
+                          setFormPagination({ ...formPagination, rate: e, currentPage: 1 });
+                        }}
+                        defaultValue={0}
+                        options={[
+                          {
+                            value: 0,
+                            label: "Tümü",
+                          },
+                          {
+                            value: 5,
+                            label: "5 Yıldız",
+                          },
+                          {
+                            value: 4,
+                            label: "4 Yıldız",
+                          },
+                          {
+                            value: 3,
+                            label: "3 Yıldız",
+                          },
+                          {
+                            value: 2,
+                            label: "2 Yıldız",
+                          },
+                          {
+                            value: 1,
+                            label: "1 Yıldız",
+                          },
+                        ]}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <Search
+                        onSearch={(e) => {
+                          setFormPagination({ ...formPagination, search: e, currentPage: 1 });
+                        }}
+                        placeholder="Yorumlarda ara..."
+                        className="w-60"
+                      />
+                    </div>
+                  </div>
+                  {comments.businessComments && comments.businessComments.length > 0 ? (
+                    <div className="col-span-1 grid grid-cols-1 justify-center content-center bg-white pt-8 pb-32">
+                      {comments.businessComments.map((x, i) => (
+                        <Comment
+                          key={i}
+                          data={x}
+                          busName={data.businessName}
+                          imagePath={IMAGES}
+                          cAvaible={true}
+                          border={false}
+                          content="Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek yedik turizm bölgesi olduğu için bildiğiniz gibi insanların önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde çalışanları o kadar samimi sanki kendi evinizdeymis gibi his ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil geçirmek için mutlaka öz tat restorantti görmenizi öneririm."
                         />
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex justify-center items-center text-center p-10">
-                    Yorum Bulunamadı!
-                  </div>
-                )}
-              </div>
+                      ))}
+                      {data.commentCount && (
+                        <div className="flex justify-center py-10">
+                          <Pagination
+                            onChange={(e) => {
+                              setFormPagination({ ...formPagination, page: e, currentPage: e });
+                            }}
+                            defaultCurrent={1}
+                            current={formPagination.currentPage}
+                            total={comments.commentCount}
+                            showSizeChanger={false}
+                            pageSize={1}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex justify-center items-center text-center p-10">
+                      Yorum Bulunamadı!
+                    </div>
+                  )}
+                </div>
+              </Spin>
             </div>
           </div>
           {
