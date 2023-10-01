@@ -19,11 +19,12 @@ import {
   AiOutlineStar,
   AiOutlineShareAlt,
   AiOutlineHeart,
+  AiOutlineDelete,
   AiOutlineSearch,
   AiOutlineLike,
   AiOutlineComment,
 } from "react-icons/ai";
-import { BsPinMap, BsTelephone, BsLink } from "react-icons/bs";
+import { BsPinMap, BsTelephone, BsLink, BsThreeDots } from "react-icons/bs";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import Comment from "~/components/Comment";
 import LoginModal from "~/components/LoginModal";
@@ -39,9 +40,12 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { useModalForm } from "sunflower-antd";
 import { post, put } from "axios";
+import SearchModal from "~/components/SearchModal";
 const { Search } = Input;
 const { TextArea } = Input;
 const { Option } = Select;
+
+
 
 export const loader = async ({ request, params }) => {
   // const param = new URL(request.url).searchParams.get("name").split("-").pop();
@@ -72,6 +76,7 @@ const Business = () => {
   const [validIframe, setValidIframe] = useState(false);
   const [form, getFieldDecorator] = Form.useForm();
   let navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(true);
   const [okButton, setOkButton] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -82,11 +87,12 @@ const Business = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [paginationLoading, setPaginationLoading] = useState(false);
+  const [searching, setSearching] = useState("");
   const [formPagination, setFormPagination] = useState({
     order: false,
     type: "",
     rate: 0,
-    page:1,
+    page: 1,
     search: "",
     currentPage: 1,
   });
@@ -120,9 +126,9 @@ const Business = () => {
   const getPaginationComment = async (ent) => {
     await fetch(
       API +
-        `/Business/GetCommentWithPagination?id=${
-          data.id
-        }&page=${ent.currentPage}&take=${1}&isAsc=${ent.order}&commentType=${ent.type}&rate=${
+        `/Business/GetCommentWithPagination?id=${data.id}&page=${
+          ent.currentPage
+        }&take=${15}&isAsc=${ent.order}&commentType=${ent.type}&rate=${
           ent.rate
         }&search=${ent.search}`,
       {
@@ -143,13 +149,21 @@ const Business = () => {
 
   useEffect(() => {
     setPaginationLoading(true);
-    const timer = setTimeout(async () => await getPaginationComment(formPagination), 500);
+    const timer = setTimeout(
+      async () => await getPaginationComment(formPagination),
+      500
+    );
     return () => clearTimeout(timer);
   }, [formPagination]);
 
   useEffect(() => {
     isIframeValidHTML(data.mapIframe);
   }, []);
+
+  // useEffect(() => {
+  //   openModal ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'unset';
+  // }, [openModal])
+  
 
   //#region Functions
 
@@ -186,7 +200,7 @@ const Business = () => {
             >
               {isOpen(data.mo) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.mo} (Bugün)
+            - {isOpen(data.mo) && data.mo} (Bugün)
           </p>
         );
         break;
@@ -200,7 +214,7 @@ const Business = () => {
             >
               {isOpen(data.tu) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.tu} (Bugün)
+            - {isOpen(data.tu) && data.tu} (Bugün)
           </p>
         );
         break;
@@ -214,7 +228,7 @@ const Business = () => {
             >
               {isOpen(data.we) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.we} (Bugün)
+            - {isOpen(data.we) && data.we} (Bugün)
           </p>
         );
         break;
@@ -228,7 +242,7 @@ const Business = () => {
             >
               {isOpen(data.th) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.th} (Bugün)
+            - {isOpen(data.th) && data.th} (Bugün)
           </p>
         );
         break;
@@ -242,7 +256,7 @@ const Business = () => {
             >
               {isOpen(data.fr) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.fr} (Bugün)
+            - {isOpen(data.fr) && data.fr} (Bugün)
           </p>
         );
         break;
@@ -256,7 +270,7 @@ const Business = () => {
             >
               {isOpen(data.sa) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.sa} (Bugün)
+            - {isOpen(data.sa) && data.sa} (Bugün)
           </p>
         );
         break;
@@ -270,7 +284,7 @@ const Business = () => {
             >
               {isOpen(data.su) ? "Şuanda açık" : "Kapalı"}
             </span>{" "}
-            - {data.su} (Bugün)
+            - {isOpen(data.su) && data.su} (Bugün)
           </p>
         );
     }
@@ -514,11 +528,16 @@ const Business = () => {
               <span className="text-gray-600 font-extralight">
                 {data.rate} ({data.commentCount} inceleme)
               </span>
-              {!data.userId && (
-                <div className="ml-auto text-red-500 rounded-lg cursor-pointer px-2 py-1 hover:text-gray-500">
-                  <AiOutlineAlert className="text-[25px]" />
+              <div className="ml-auto flex items-center space-x-3">
+                {/* {!data.userId && ( */}
+                  <div className="rounded-lg cursor-pointer pb-1 hover:text-red-500">
+                    <AiOutlineAlert className="text-[25px]" />
+                  </div>
+                {/* // )} */}
+                <div className="rounded-lg cursor-pointer py-1 hover:text-red-500">
+                  <BsThreeDots className="text-[25px]" />
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="flex items-center justify-between">
@@ -1054,7 +1073,11 @@ const Business = () => {
                       <Select
                         className="w-28"
                         onChange={(e) => {
-                          setFormPagination({ ...formPagination, order: e, currentPage: 1  });
+                          setFormPagination({
+                            ...formPagination,
+                            order: e,
+                            currentPage: 1,
+                          });
                         }}
                         defaultValue={false}
                         options={[
@@ -1072,7 +1095,11 @@ const Business = () => {
                       <Select
                         className="w-28"
                         onChange={(e) => {
-                          setFormPagination({ ...formPagination, type: e, currentPage: 1 });
+                          setFormPagination({
+                            ...formPagination,
+                            type: e,
+                            currentPage: 1,
+                          });
                         }}
                         defaultValue=""
                         options={[
@@ -1110,7 +1137,11 @@ const Business = () => {
                       <Select
                         className="w-28"
                         onChange={(e) => {
-                          setFormPagination({ ...formPagination, rate: e, currentPage: 1 });
+                          setFormPagination({
+                            ...formPagination,
+                            rate: e,
+                            currentPage: 1,
+                          });
                         }}
                         defaultValue={0}
                         options={[
@@ -1144,14 +1175,46 @@ const Business = () => {
                     <div className="flex items-center">
                       <Search
                         onSearch={(e) => {
-                          setFormPagination({ ...formPagination, search: e, currentPage: 1 });
+                          setFormPagination({
+                            ...formPagination,
+                            search: e.trim(),
+                            currentPage: 1,
+                          });
+                          setSearching(e.trim());
                         }}
+                        onChange={(e) => setSearching(e.target.value)}
+                        value={searching}
                         placeholder="Yorumlarda ara..."
                         className="w-60"
                       />
                     </div>
                   </div>
-                  {comments.businessComments && comments.businessComments.length > 0 ? (
+                  {formPagination.search !== "" && (
+                    <div className="flex items-center mt-4 ">
+                      <span className="text-gray-400 font-light mr-2">
+                        aranan:
+                      </span>
+                      <div className="flex items-center px-2 py-1 space-x-2 border rounded-lg">
+                        <span className="">{formPagination.search}</span>
+                        <button
+                          onClick={(e) => {
+                            setFormPagination({
+                              ...formPagination,
+                              search: "",
+                              currentPage: 1,
+                            });
+                            setSearching("");
+                          }}
+                          className="hover:text-red-500 mt-[2px]"
+                        >
+                          <AiOutlineDelete />{" "}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {comments.businessComments &&
+                  comments.businessComments.length > 0 ? (
                     <div className="col-span-1 grid grid-cols-1 justify-center content-center bg-white pt-8 pb-32">
                       {comments.businessComments.map((x, i) => (
                         <Comment
@@ -1168,13 +1231,17 @@ const Business = () => {
                         <div className="flex justify-center py-10">
                           <Pagination
                             onChange={(e) => {
-                              setFormPagination({ ...formPagination, page: e, currentPage: e });
+                              setFormPagination({
+                                ...formPagination,
+                                page: e,
+                                currentPage: e,
+                              });
                             }}
                             defaultCurrent={1}
                             current={formPagination.currentPage}
                             total={comments.commentCount}
                             showSizeChanger={false}
-                            pageSize={1}
+                            pageSize={15}
                           />
                         </div>
                       )}
@@ -1264,6 +1331,9 @@ const Business = () => {
           src={previewImage}
         />
       </Modal>
+
+      {openModal && <SearchModal closeModal={setOpenModal} />}
+      
     </div>
   );
 };

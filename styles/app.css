@@ -663,3 +663,49 @@ body {
 
 
 
+/* Slider */
+
+.slider-wrapper {
+  overflow: hidden;
+}
+
+.slider {
+  /* position: relative; */
+  display: flex;
+  transition: 0.5s;
+}
+
+.item {
+  flex: 1 0 4.5%;
+}
+
+
+@media (max-width: 1700px) {
+  .item {
+    flex: 1 0 5%;
+  }
+}
+
+@media (max-width: 1500px) {
+  .item {
+    flex: 1 0 6%;
+  }
+}
+
+@media (max-width: 1250px) {
+  .item {
+    flex: 1 0 7%;
+  }
+}
+
+@media (max-width: 1050px) {
+  .item {
+    flex: 1 0 9%;
+  }
+}
+
+@media (max-width: 1050px) {
+  .item {
+    flex: 1 0 11%;
+  }
+}
