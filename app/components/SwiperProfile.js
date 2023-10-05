@@ -1,52 +1,76 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
-import { Link } from "@remix-run/react";
+import ImageWithCommentModal from "./ImageWithCommentModal";
+import { useEffect, useState } from "react";
 
-const SwiperProfile = () => {
+const SwiperProfile = ({ comment, user, API_IMAGES }) => {
+  const [openModal, setOpenModal] = useState({
+    visible: false,
+    data: { images: comment.images },
+    currentIndex: 0,
+  });
+
+  useEffect(() => {
+    openModal.visible
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "unset");
+  }, [openModal]);
+
   return (
     <>
-      <Swiper
-        pagination={{
-          type: "fraction",
-        }}
-        navigation={true}
-        modules={[Navigation, Pagination]}
-        className="profileSwiper bg-black"
-      >
-        <SwiperSlide key={1}>
-          <Link to="/">
-            <img
-              className="w-full aspect-square object-cover"
-              src="https://s3-media0.fl.yelpcdn.com/bphoto/UT9Aryi6x-UPKa8oHJR3tA/o.jpg"
-              alt=""
-              placeholder="blur"
-              blurdataurl={"https://s3-media0.fl.yelpcdn.com/bphoto/UT9Aryi6x-UPKa8oHJR3tA/o.jpg"}
-            />
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide key={2}>
-          <Link to="/">
-            <img
-              className="w-full aspect-square object-cover"
-              src="https://s3-media0.fl.yelpcdn.com/bphoto/c-bXSP131v68zxoEn_fCXA/o.jpg"
-              alt=""
-              placeholder="blur"
-              blurdataurl={"https://s3-media0.fl.yelpcdn.com/bphoto/c-bXSP131v68zxoEn_fCXA/o.jpg"}
-            />
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide key={3}>
-          <Link to="/">
-            <img
-              className="w-full aspect-square object-cover"
-              src="https://s3-media0.fl.yelpcdn.com/bphoto/g2Io35QbsmlycPstkewxhg/o.jpg"
-              alt=""
-              placeholder="blur"
-              blurdataurl={"https://s3-media0.fl.yelpcdn.com/bphoto/g2Io35QbsmlycPstkewxhg/o.jpg"}
-            />
-          </Link>
-        </SwiperSlide>
-      </Swiper>
+      {comment.images && comment.images.length > 0 ? (
+        <Swiper
+          pagination={{
+            type: "fraction",
+          }}
+          navigation={true}
+          modules={[Navigation, Pagination]}
+          className="profileSwiper bg-black cursor-pointer"
+        >
+          {comment.images.map((image, index) => (
+            <SwiperSlide key={index}>
+              <div
+                onClick={() =>
+                  setOpenModal({
+                    visible: true,
+                    data: {
+                      images: comment.images,
+                      name: user.name,
+                      surname: user.surname,
+                      userImage: user.userPhoto,
+                      rate: comment.rate,
+                      totalComments: user.totalComment,
+                      comment: comment.comment,
+                      commentType: comment.commentType,
+                      created: comment.created
+                    },
+                    currentIndex: index,
+                  })
+                }
+              >
+                <img
+                  className="w-full aspect-square object-cover"
+                  src={`${API_IMAGES}/business/${image}`}
+                  alt={image}
+                  placeholder="blur"
+                  blurdataurl={
+                    "https://s3-media0.fl.yelpcdn.com/bphoto/UT9Aryi6x-UPKa8oHJR3tA/o.jpg"
+                  }
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <div></div>
+      )}
+      {openModal.visible && (
+        <ImageWithCommentModal
+          setModal={setOpenModal}
+          imageData={openModal}
+          IMAGES={API_IMAGES}
+        />
+      )}
     </>
   );
 };

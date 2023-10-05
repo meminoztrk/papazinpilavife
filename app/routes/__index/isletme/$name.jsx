@@ -31,6 +31,7 @@ import LoginModal from "~/components/LoginModal";
 import {
   Link,
   useLoaderData,
+  useLocation,
   useNavigate,
   useOutletContext,
 } from "@remix-run/react";
@@ -40,12 +41,10 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { useModalForm } from "sunflower-antd";
 import { post, put } from "axios";
-import SearchModal from "~/components/SearchModal";
+import ImageWithCommentModal from "~/components/ImageWithCommentModal";
 const { Search } = Input;
 const { TextArea } = Input;
 const { Option } = Select;
-
-
 
 export const loader = async ({ request, params }) => {
   // const param = new URL(request.url).searchParams.get("name").split("-").pop();
@@ -73,10 +72,15 @@ export const loader = async ({ request, params }) => {
 const Business = () => {
   const [existUser, handleChange] = useOutletContext();
   const { data, API, API_KEY, IMAGES } = useLoaderData();
+  const location = useLocation();
   const [validIframe, setValidIframe] = useState(false);
-  const [form, getFieldDecorator] = Form.useForm();
+  const [form] = Form.useForm();
   let navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState({
+    visible: false,
+    data: null,
+    currentIndex: 0,
+  });
   const [okButton, setOkButton] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -141,7 +145,6 @@ const Business = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log("sayfa yüklenirken geldi", data.data);
         setComments(data.data);
         setPaginationLoading(false);
       });
@@ -149,21 +152,25 @@ const Business = () => {
 
   useEffect(() => {
     setPaginationLoading(true);
+    console.log("geldi mi");
     const timer = setTimeout(
       async () => await getPaginationComment(formPagination),
       500
     );
     return () => clearTimeout(timer);
-  }, [formPagination]);
+  }, [formPagination, location]);
 
   useEffect(() => {
+    console.log(data);
+    console.log("yenilendi");
     isIframeValidHTML(data.mapIframe);
   }, []);
 
-  // useEffect(() => {
-  //   openModal ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'unset';
-  // }, [openModal])
-  
+  useEffect(() => {
+    openModal.visible
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "unset");
+  }, [openModal]);
 
   //#region Functions
 
@@ -466,46 +473,120 @@ const Business = () => {
       {
         //#region Image Gallery
       }
-      <div className="mt-2">
-        <div className="flex space-x-1 w-full">
-          <div className="w-3/5 relative cursor-pointer">
-            <img
-              alt="gallery"
-              className="block h-full w-full aspect-[16/9] rounded-l-lg object-cover object-center"
-              src="https://media-cdn.tripadvisor.com/media/photo-s/13/55/10/b5/gorele-usulu-zengin-cesit.jpg"
-            />
-            <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
-          </div>
+      {data.businessImages.length > 0 ? (
+        <div className="mt-2">
+          <div className="flex space-x-1 w-full bg-white rounded-lg">
+            {data.businessImages.length > 3 ? (
+              <>
+                <div
+                  onClick={() =>
+                    setOpenModal({
+                      visible: true,
+                      data: {images: data.businessImages,...data},
+                      currentIndex: 0,
+                    })
+                  }
+                  className="w-3/5 relative cursor-pointer"
+                >
+                  <img
+                    alt="gallery"
+                    className="block h-full w-full aspect-[16/9] rounded-l-lg object-cover object-center"
+                    src={`${IMAGES}/business/${data.businessImages[0]}`}
+                  />
+                  <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+                </div>
 
-          <div className="w-1/5 flex flex-col gap-y-1">
-            <div className="h-1/2 relative cursor-pointer">
-              <img
-                alt="gallery"
-                className="block h-full w-full object-cover object-center"
-                src="https://media-cdn.tripadvisor.com/media/photo-s/13/55/12/a1/yahyabey-corum-tandir.jpg"
-              />
-              <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
-            </div>
-            <div className="h-1/2 relative cursor-pointer">
-              <img
-                alt="gallery"
-                className="block h-full w-full object-cover object-center"
-                src="https://media-cdn.tripadvisor.com/media/photo-f/13/55/10/95/konya-usulu.jpg"
-              />
-              <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
-            </div>
-          </div>
+                <div className="w-1/5 flex flex-col gap-y-1">
+                  <div
+                    onClick={() =>
+                      setOpenModal({
+                        visible: true,
+                        data: {images: data.businessImages,...data},
+                        currentIndex: 1,
+                      })
+                    }
+                    className="h-1/2 relative cursor-pointer"
+                  >
+                    <img
+                      alt="gallery"
+                      className="block h-full w-full object-cover object-center"
+                      src={`${IMAGES}/business/${data.businessImages[1]}`}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+                  </div>
+                  <div
+                    onClick={() =>
+                      setOpenModal({
+                        visible: true,
+                        data: {images: data.businessImages,...data},
+                        currentIndex: 2,
+                      })
+                    }
+                    className="h-1/2 relative cursor-pointer"
+                  >
+                    <img
+                      alt="gallery"
+                      className="block h-full w-full object-cover object-center"
+                      src={`${IMAGES}/business/${data.businessImages[2]}`}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+                  </div>
+                </div>
 
-          <div className="w-1/5 flex relative cursor-pointer">
-            <img
-              alt="gallery"
-              className="block h-full w-full aspect-[9/16] rounded-r-lg object-cover object-center"
-              src="https://media-cdn.tripadvisor.com/media/photo-f/13/55/10/90/bursa-ya-ozgu-cantik.jpg"
-            />
-            <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+                <div
+                  onClick={() =>
+                    setOpenModal({
+                      visible: true,
+                      data: {images: data.businessImages,...data},
+                      currentIndex: 3,
+                    })
+                  }
+                  className="w-1/5 flex relative cursor-pointer"
+                >
+                  <img
+                    alt="gallery"
+                    className="block h-full w-full aspect-[9/16] rounded-r-lg object-cover object-center"
+                    src={`${IMAGES}/business/${data.businessImages[3]}`}
+                  />
+                  <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+                </div>
+              </>
+            ) : (
+              <div
+                onClick={() =>
+                  setOpenModal({
+                    visible: true,
+                    data: {images: data.businessImages,...data},
+                    currentIndex: 0,
+                  })
+                }
+                className="w-full relative cursor-pointer bg-white rounded-lg"
+              >
+                <img
+                  alt="gallery"
+                  className="block h-full w-full aspect-[16/6] rounded-lg object-cover object-center"
+                  src={`${IMAGES}/business/${data.businessImages[0]}`}
+                />
+                <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="mt-2">
+          <div className="flex space-x-1 w-full">
+            <div className="w-full relative cursor-pointer bg-white rounded-lg">
+              <img
+                alt="gallery"
+                className="block h-full w-full aspect-[16/6] rounded-lg object-cover object-center"
+                src={`${IMAGES}/business/defaultbusiness.png`}
+              />
+              <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {
         //#endregion
       }
@@ -530,9 +611,9 @@ const Business = () => {
               </span>
               <div className="ml-auto flex items-center space-x-3">
                 {/* {!data.userId && ( */}
-                  <div className="rounded-lg cursor-pointer pb-1 hover:text-red-500">
-                    <AiOutlineAlert className="text-[25px]" />
-                  </div>
+                <div className="rounded-lg cursor-pointer pb-1 hover:text-red-500">
+                  <AiOutlineAlert className="text-[25px]" />
+                </div>
                 {/* // )} */}
                 <div className="rounded-lg cursor-pointer py-1 hover:text-red-500">
                   <BsThreeDots className="text-[25px]" />
@@ -747,7 +828,7 @@ const Business = () => {
               <ul className="flex items-center text-[18px] text-red-500">
                 {data.facebook && (
                   <a
-                    href={data.instagram}
+                    Link={data.instagram}
                     target="_blank"
                     className="cursor-pointer hover:text-gray-500 p-1 rounded-full"
                   >
@@ -1221,6 +1302,7 @@ const Business = () => {
                           key={i}
                           data={x}
                           busName={data.businessName}
+                          imageModal={setOpenModal}
                           imagePath={IMAGES}
                           cAvaible={true}
                           border={false}
@@ -1262,7 +1344,7 @@ const Business = () => {
             //#region Sticky Menu
           }
           <div className="md:col-span-2 col-span-6">
-            <div className="sticky top-16 mt-10 rounded-lg border shadow-lg pb-10 pr-2">
+            <div className="sticky top-16 mt-10 rounded-lg border shadow-lg pb-10">
               {validIframe && (
                 <div
                   className="flex w-full map"
@@ -1270,7 +1352,7 @@ const Business = () => {
                 ></div>
               )}
 
-              <div>
+              <div className="pr-2">
                 {data.adress && (
                   <div className="flex items-center text-[13.5px] pt-4 mr-1 font-light">
                     <span className="mx-4 text-lg text-blue-500">
@@ -1332,8 +1414,13 @@ const Business = () => {
         />
       </Modal>
 
-      {openModal && <SearchModal closeModal={setOpenModal} />}
-      
+      {openModal.visible && (
+        <ImageWithCommentModal
+          setModal={setOpenModal}
+          imageData={openModal}
+          IMAGES={IMAGES}
+        />
+      )}
     </div>
   );
 };

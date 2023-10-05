@@ -8,7 +8,7 @@ import {
   AiFillStar,
   AiOutlineSetting,
   AiOutlineShop,
-  AiOutlineProfile
+  AiOutlineProfile,
 } from "react-icons/ai";
 import {
   Popover,
@@ -20,24 +20,24 @@ import {
   Dropdown,
   Menu,
 } from "antd";
-import { Link, useNavigate } from "@remix-run/react";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { getUserToken, removeToken } from "../hooks/cookie";
-import logo from "public/pngegg.png"
+import logo from "public/pngegg.png";
 
 const vakitlerName = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 const date = new Date();
 
 export const Header = ({ openModal, data, existUser, handleChange }) => {
   const [navbar, setNavbar] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState({ text: "", location: "", loctext: "" });
   const [hidden, setHidden] = useState(true);
+  const location = useLocation();
   const [provinces, setProvinces] = useState([]);
   let menuRef = useRef();
   let navigate = useNavigate();
   let start = new Date();
 
   const getSearchingProvince = async (value) => {
-    console.log(value);
     await fetch(data.API + `/Generic/GetSearchingProvinces?value=${value}`, {
       method: "GET",
       headers: {
@@ -79,8 +79,8 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
       <Menu.Item
         key="Recommend"
         onClick={() =>
-          navigate(existUser &&
-            existUser.isBusiness
+          navigate(
+            existUser && existUser.isBusiness
               ? "/profilebusiness"
               : `profile?userid${existUser.userId}`
           )
@@ -119,6 +119,13 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
     </Menu>
   );
 
+  const handleSearch = (ent) => {
+    ent.text.trim() != "" &&
+      ent.location != "" &&
+      location.search != `?text=${ent.text.trim()}&location=${ent.location}` &&
+      navigate(`/search?text=${ent.text.trim()}&location=${ent.location}`);
+  };
+
   return (
     <div className="fixed w-full top-0 z-40 font-inter">
       <div
@@ -131,11 +138,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
         <div className="flex items-center justify-center text-gray-800">
           <div className="w-20 justify-center">
             <Link to="/">
-              <img
-                alt="logo"
-                className="object-cover"
-                src={logo}
-              />
+              <img alt="logo" className="object-cover" src={logo} />
             </Link>
           </div>
           <div className="flex items-center divide-x divide-gray-300">
@@ -202,6 +205,8 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
               <Input
                 className="w-96 rounded-l-xl h-12 px-4"
                 placeholder="Ne aramak istediğiniz..."
+                value={search.text}
+                onChange={(e) => setSearch({ ...search, text: e.target.value })}
               />
             </div>
             <div className="flex items-center">
@@ -210,7 +215,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
                   className="w-80 h-12 px-4n"
                   placeholder="Konum"
                   onChange={(e) => {
-                    setSearch(e.target.value);
+                    setSearch({ ...search, loctext: e.target.value });
                     start = new Date();
                     setTimeout(function () {
                       if (new Date() - start > 250) {
@@ -219,7 +224,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
                       }
                     }, 250);
                   }}
-                  value={search}
+                  value={search.loctext}
                 />
                 <div
                   className={`top-12 w-full cursor-default absolute bg-white rounded-b-lg border py-4 p-2 ${
@@ -228,27 +233,33 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
                 >
                   {provinces.length > 0 ? (
                     provinces.map((x, i) => (
-                      <Link
-                        to={"/business"}
+                      <button
                         key={i}
-                        className="hover:bg-gray-100 hover:text-black font-medium rounded-lg w-full p-2 flex items-center"
+                        className="hover:bg-gray-100 hover:text-black font-medium rounded-lg w-full p-2 flex items-center text-start"
                         onClick={() => {
-                          setSearch(x.city);
+                          setSearch({
+                            ...search,
+                            location: x.id,
+                            loctext: x.city,
+                          });
                           setHidden(true);
                         }}
                       >
                         <AiOutlineSwapRight className="text-gray-400 mr-2" />
                         {x.city}
-                      </Link>
+                      </button>
                     ))
                   ) : (
                     <span className="pb-10 text-gray-200">Konum girin</span>
                   )}
                 </div>
               </div>
-              <div className="bg-red-600 py-[14px] rounded-r-xl pl-3 pr-4 stroke-2">
+              <button
+                onClick={() => handleSearch(search)}
+                className="bg-red-600 py-[14px] rounded-r-xl pl-3 pr-4 stroke-2"
+              >
                 <AiOutlineSearch fontSize={19} color="white" strokeWidth={2} />
-              </div>
+              </button>
             </div>
           </div>
         </div>

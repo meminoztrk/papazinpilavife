@@ -576,11 +576,11 @@ const mybusinesses = () => {
   };
 
   const splitItem = (text) => {
-    return text != null ? text.split(",,") : null;
+    return text != null ? text.split(",,") : [];
   };
 
   const joinItem = (text) => {
-    return text != null ? text.join(",,") : null;
+    return text != null && text != "" ? text.join(",,") : null;
   };
 
   const {

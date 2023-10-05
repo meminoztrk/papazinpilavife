@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Header } from './../components/Header';
 import { Footer } from './../components/Footer';
 import { useLoaderData } from "@remix-run/react";
-import SearchModal from './../components/SearchModal';
+import SearchModal from '../components/ImageWithCommentModal';
 import { useOutletContext } from 'react-router-dom';
 import Projection from "~/components/Projection";
 import { getUser, getJwt } from "~/hooks/cookie";

@@ -11,58 +11,58 @@ import StickyMenu from './../../../components/StickyMenu';
 
 
 
-export const loader = async ({ params }) => {
-    const blogId = params.blogId.split("-").pop()
-    const req = await fetch(process.env.REACT_APP_API + `/Blog/GetWithCatById?id=${blogId}&category=${params.catname}`, {
-        headers: {
-            'ApiKey': process.env.REACT_APP_API_KEY,
-            'Content-Type': 'application/json'
-        }
-    })
-    const blog = await req.json();
-    const data = {
-        data: blog.data,
-        API: process.env.REACT_APP_API,
-        API_KEY: process.env.REACT_APP_API_KEY,
-        IMAGES: process.env.REACT_APP_IMAGES
-    }
-    if (data.data) { return data } else { return redirect("/404") }
-}
+// export const loader = async ({ params }) => {
+//     const blogId = params.blogId.split("-").pop()
+//     const req = await fetch(process.env.REACT_APP_API + `/Blog/GetWithCatById?id=${blogId}&category=${params.catname}`, {
+//         headers: {
+//             'ApiKey': process.env.REACT_APP_API_KEY,
+//             'Content-Type': 'application/json'
+//         }
+//     })
+//     const blog = await req.json();
+//     const data = {
+//         data: blog.data,
+//         API: process.env.REACT_APP_API,
+//         API_KEY: process.env.REACT_APP_API_KEY,
+//         IMAGES: process.env.REACT_APP_IMAGES
+//     }
+//     if (data.data) { return data } else { return redirect("/404") }
+// }
 
-export const meta = ({ data }) => {
-    const title = data.data.title
-    const description = data.data.seoDescription
-    const keywords = data.data.seoKeywords
-    const categoryName = data.data.categoryName
-    return {
-        description,
-        keywords,
-        title,
-        "og:site_name": "Diyanet Gönüllüleri",
-        "og:title":title,
-        "og:description":description,
-        "og:image":data.IMAGES + "blog/" + data.data.image,
-        "og:url":"https://www.diyanetgonulluleri.com/"+"kategoriler/"+seoHelp(categoryName)+"/"+seoHelp(title)+"-"+data.data.id,
-        "og:type": "article",
-        "og:image": data.IMAGES + "blog/" + data.data.image,
-        "og:image:width": 1280,
-        "og:image:heigth": 720,
-        "twitter:card":"summary_large_image",
-        "twitter:url":"https://www.diyanetgonulluleri.com/"+"kategoriler/"+seoHelp(categoryName)+"/"+seoHelp(title)+"-"+data.data.id,
-        "twitter:domain":"https://www.diyanetgonulluleri.com",
-        "twitter:site":"Diyanet Gönüllüleri",
-        "twitter:title":title,
-        "twitter:description":description,
-        "twitter:image:src":data.IMAGES + "blog/" + data.data.image,
-    }
-}
+// export const meta = ({ data }) => {
+//     const title = data.data.title
+//     const description = data.data.seoDescription
+//     const keywords = data.data.seoKeywords
+//     const categoryName = data.data.categoryName
+//     return {
+//         description,
+//         keywords,
+//         title,
+//         "og:site_name": "Diyanet Gönüllüleri",
+//         "og:title":title,
+//         "og:description":description,
+//         "og:image":data.IMAGES + "blog/" + data.data.image,
+//         "og:url":"https://www.diyanetgonulluleri.com/"+"kategoriler/"+seoHelp(categoryName)+"/"+seoHelp(title)+"-"+data.data.id,
+//         "og:type": "article",
+//         "og:image": data.IMAGES + "blog/" + data.data.image,
+//         "og:image:width": 1280,
+//         "og:image:heigth": 720,
+//         "twitter:card":"summary_large_image",
+//         "twitter:url":"https://www.diyanetgonulluleri.com/"+"kategoriler/"+seoHelp(categoryName)+"/"+seoHelp(title)+"-"+data.data.id,
+//         "twitter:domain":"https://www.diyanetgonulluleri.com",
+//         "twitter:site":"Diyanet Gönüllüleri",
+//         "twitter:title":title,
+//         "twitter:description":description,
+//         "twitter:image:src":data.IMAGES + "blog/" + data.data.image,
+//     }
+// }
 
 const kategori = () => {
-    const { data, IMAGES, API, API_KEY } = useLoaderData();
+    // const { data, IMAGES, API, API_KEY } = useLoaderData();
 
     return (
         <div className='mt-8'>
-            <div className="grid md:grid-cols-7 md:space-x-4">
+            {/* <div className="grid md:grid-cols-7 md:space-x-4">
                 <div className="md:col-span-5">
                     <div className="bg-white shadow">
                         <div className='p-8'>
@@ -144,7 +144,7 @@ const kategori = () => {
                 </div>
                 <StickyMenu API={{API,API_KEY}} />
 
-            </div>
+            </div> */}
 
 
         </div>

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Rate } from "antd";
 import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
 import moment from "moment";
-
+import { BsThreeDots } from "react-icons/bs";
 
 const Comment = ({
   data,
   imagePath,
   busName,
+  imageModal,
   border = true,
   cAvaible = false,
 }) => {
@@ -32,24 +33,31 @@ const Comment = ({
             alt={data.userImage}
           />
         </div>
-        <span className="font-semibold">{data.name} {data.surname[0]}.</span>
+        <span className="font-semibold">
+          {data.name} {data.surname[0]}.
+        </span>
         <span className="block text-[10px]">{data.totalComment} yorum</span>
       </div>
 
       <div className="col-span-4">
         <div className="flex flex-wrap flex-col p-2">
-          <div className="flex items-center space-x-4">
-            <span className="font-semibold text-base">
-              {busName}
-            </span>
-            <Rate
-              className="text-[13px] text-red-500 font-bold"
-              disabled
-              allowHalf 
-              value={data.rate}
-              defaultValue={0}
-            />
-            <span className="text-[10px]">{moment(data.created).format("DD.MM.yyyy")}</span>
+          <div className="flex justify-between space-x-4">
+            <div className="space-x-4 flex items-center">
+              <span className="font-semibold text-base">{busName}</span>
+              <Rate
+                className="text-[13px] text-red-500 font-bold"
+                disabled
+                allowHalf
+                value={data.rate}
+                defaultValue={0}
+              />
+              <span className="text-[10px]">
+                {moment(data.created).format("DD.MM.yyyy")}
+              </span>
+            </div>
+            <div className="flex items-start">
+              <BsThreeDots className="text-gray-500" size={18}/>
+            </div>
           </div>
           <span className="text-sm ">
             <span className={`${collap ? "hidden" : ""}`}>{contentless}</span>
@@ -65,13 +73,21 @@ const Comment = ({
           </span>
 
           <div className="flex flex-wrap space-x-2 items-center py-4">
-            {data.images.map((x,i) => (
-              <img
-              key={i}
-              className="aspect-square w-20 rounded object-cover"
-              src={`${imagePath}/business/${x}`}
-              alt={x}
-            />
+            {data.images.map((x, i) => (
+              <div
+                key={i}
+                className="relative hover:cursor-pointer"
+                onClick={() =>
+                  imageModal({ visible: true, data: data, currentIndex: i })
+                }
+              >
+                <img
+                  className="aspect-square w-20 rounded object-cover"
+                  src={`${imagePath}/business/${x}`}
+                  alt={x}
+                />
+                <div className="absolute rounded-lg bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,10%,16%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
+              </div>
             ))}
           </div>
           {cAvaible && (
