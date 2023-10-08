@@ -20,6 +20,7 @@ import {
   AiOutlineShareAlt,
   AiOutlineHeart,
   AiOutlineDelete,
+  AiFillHeart,
   AiOutlineSearch,
   AiOutlineLike,
   AiOutlineComment,
@@ -81,7 +82,9 @@ const Business = () => {
     data: null,
     currentIndex: 0,
   });
+  const [like, setLike] = useState(data.likedUsers);
   const [okButton, setOkButton] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [images, setImages] = useState([]);
@@ -150,6 +153,63 @@ const Business = () => {
       });
   };
 
+  const LikeBusiness = async () => {
+    if (existUser !== null) {
+      setLoading(true);
+      await fetch(API + "/FavoriteBusiness", {
+        method: "POST",
+        headers: {
+          ApiKey: API_KEY,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          businessId: data.id,
+          userId: existUser.id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setLoading(false);
+          data.statusCode == 200 && setLike([...like, parseInt(existUser.id)]);
+          notification.open({
+            message: (
+              <span className="flex items-center space-x-2">
+                <AiOutlineBell className=" text-green-500 text-lg" size={24} />
+                <span>İşletme Kaydedildi</span>
+              </span>
+            ),
+            description:
+              "İşletme başarı ile kaydedildi.",
+          })
+        });
+    } else {
+      handleLoginModal(true);
+    }
+  };
+
+  const UnlikeBusiness = async () => {
+    setLoading(true);
+    await fetch(
+      API + `/FavoriteBusiness?businessId=${data.id}&userid=${existUser.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          ApiKey: API_KEY,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setLoading(false);
+        data.statusCode == 200 &&
+          setLike([like.filter((x) => x !== parseInt(existUser.id))]);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     setPaginationLoading(true);
     console.log("geldi mi");
@@ -161,8 +221,6 @@ const Business = () => {
   }, [formPagination, location]);
 
   useEffect(() => {
-    console.log(data);
-    console.log("yenilendi");
     isIframeValidHTML(data.mapIframe);
   }, []);
 
@@ -482,7 +540,7 @@ const Business = () => {
                   onClick={() =>
                     setOpenModal({
                       visible: true,
-                      data: {images: data.businessImages,...data},
+                      data: { images: data.businessImages, ...data },
                       currentIndex: 0,
                     })
                   }
@@ -501,7 +559,7 @@ const Business = () => {
                     onClick={() =>
                       setOpenModal({
                         visible: true,
-                        data: {images: data.businessImages,...data},
+                        data: { images: data.businessImages, ...data },
                         currentIndex: 1,
                       })
                     }
@@ -518,7 +576,7 @@ const Business = () => {
                     onClick={() =>
                       setOpenModal({
                         visible: true,
-                        data: {images: data.businessImages,...data},
+                        data: { images: data.businessImages, ...data },
                         currentIndex: 2,
                       })
                     }
@@ -537,7 +595,7 @@ const Business = () => {
                   onClick={() =>
                     setOpenModal({
                       visible: true,
-                      data: {images: data.businessImages,...data},
+                      data: { images: data.businessImages, ...data },
                       currentIndex: 3,
                     })
                   }
@@ -556,7 +614,7 @@ const Business = () => {
                 onClick={() =>
                   setOpenModal({
                     visible: true,
-                    data: {images: data.businessImages,...data},
+                    data: { images: data.businessImages, ...data },
                     currentIndex: 0,
                   })
                 }
@@ -815,10 +873,27 @@ const Business = () => {
                   </Form>
                 </Spin>
               </Modal>
-              <button className=" text-white bg-red-500 hover:bg-red-700 mr-3 pl-2 pr-3 py-1 rounded-lg flex items-center gap-x-1 text-base">
-                <AiOutlineHeart className="text-[20px]" />{" "}
-                <span className="text-[13px]">Kaydet</span>
-              </button>
+              {existUser != null &&
+              like.includes(parseInt(existUser.id)) ? (
+                <button
+                  {...(loading && { disabled: true })}
+                  onClick={() => UnlikeBusiness()}
+                  className="text-white bg-red-500 hover:bg-red-700 mr-3 pl-2 pr-3 py-1 rounded-lg flex items-center gap-x-1 text-base"
+                >
+                  <AiFillHeart className="text-[20px]" />{" "}
+                  <span className="text-[13px]">Kaydet</span>
+                </button>
+              ) : (
+                <button
+                  {...(loading && { disabled: true })}
+                  onClick={() => LikeBusiness()}
+                  className="text-white bg-red-500 hover:bg-red-700 mr-3 pl-2 pr-3 py-1 rounded-lg flex items-center gap-x-1 text-base"
+                >
+                  <AiOutlineHeart className="text-[20px]" />{" "}
+                  <span className="text-[13px]">Kaydet</span>
+                </button>
+              )}
+
               <button className=" text-white bg-red-500 hover:bg-red-700 mr-3 pl-2 pr-3 py-1 rounded-lg flex items-center gap-x-1 text-base">
                 <AiOutlineShareAlt className="text-[20px]" />{" "}
                 <span className="text-[13px]">Paylaş</span>
@@ -1301,11 +1376,15 @@ const Business = () => {
                         <Comment
                           key={i}
                           data={x}
+                          existUser={existUser}
                           busName={data.businessName}
+                          API={API}
+                          API_KEY={API_KEY}
                           imageModal={setOpenModal}
                           imagePath={IMAGES}
                           cAvaible={true}
                           border={false}
+                          handleLoginModal={handleLoginModal}
                           content="Ailece tatil için gittiğimiz alanyada bazı restorant ta yemek yedik turizm bölgesi olduğu için bildiğiniz gibi insanların önüne yemekleri koyduklarında hersey bitiyor bir arkadaşın tavsiyesi üzerine öz tat restorant ta gittik hem yemekleri hemde çalışanları o kadar samimi sanki kendi evinizdeymis gibi his ediyorsunuz hele bir tepsi kebabı yedik hayatımda yediğim en güzel tepsi kebabiydi sizde ailenizle birlikte güzel bir tatil geçirmek için mutlaka öz tat restorantti görmenizi öneririm."
                         />
                       ))}

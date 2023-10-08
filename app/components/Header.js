@@ -82,7 +82,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
           navigate(
             existUser && existUser.isBusiness
               ? "/profilebusiness"
-              : `profile?userid${existUser.userId}`
+              : `profile?userid=${existUser.userId}`
           )
         }
       >

@@ -1,23 +1,88 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Rate } from "antd";
-import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
+import { AiOutlineLike, AiOutlineComment, AiFillLike } from "react-icons/ai";
 import moment from "moment";
 import { BsThreeDots } from "react-icons/bs";
+import { Link } from "react-router-dom";
+
 
 const Comment = ({
   data,
   imagePath,
+  existUser,
   busName,
   imageModal,
+  API,
+  API_KEY,
+  handleLoginModal,
   border = true,
   cAvaible = false,
 }) => {
   const [collap, setCollap] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [like, setLike] = useState({
+    likes: data.likedUsers,
+    count: data.likedUsers.length,
+  });
   const contentless =
     data.comment && data.comment.length > 300
       ? data.comment.substring(0, 300) + "..."
       : data.comment;
+
+  const LikeComment = async () => {
+    if (existUser !== null) {
+      setLoading(true);
+      await fetch(API + "/FavoriteComment", {
+        method: "POST",
+        headers: {
+          ApiKey: API_KEY,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          businessCommentId: data.businessId,
+          userId: existUser.id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setLoading(false);
+          data.statusCode == 200 &&
+            setLike({
+              likes: [...like.likes, parseInt(existUser.id)],
+              count: like.count + 1,
+            });
+        });
+    } else {
+      handleLoginModal(true)
+    }
+  };
+
+  const DeleteComment = async () => {
+    setLoading(true);
+    await fetch(
+      API +
+        `/FavoriteComment?businessCommentId=${data.id}&userid=${existUser.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          ApiKey: API_KEY,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setLoading(false);
+        data.statusCode == 200 &&
+          setLike({
+            likes: [like.likes.filter((x) => x !== parseInt(existUser.id))],
+            count: like.count - 1,
+          });
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div
@@ -33,9 +98,13 @@ const Comment = ({
             alt={data.userImage}
           />
         </div>
-        <span className="font-semibold">
+        <Link
+          target="_blank"
+          to={`/profile?userid=${data.userId}`}
+          className="font-semibold hover:text-red-500"
+        >
           {data.name} {data.surname[0]}.
-        </span>
+        </Link>
         <span className="block text-[10px]">{data.totalComment} yorum</span>
       </div>
 
@@ -56,7 +125,7 @@ const Comment = ({
               </span>
             </div>
             <div className="flex items-start">
-              <BsThreeDots className="text-gray-500" size={18}/>
+              <BsThreeDots className="text-gray-500" size={18} />
             </div>
           </div>
           <span className="text-sm ">
@@ -92,10 +161,31 @@ const Comment = ({
           </div>
           {cAvaible && (
             <div className="flex items-center justify-start space-x-2">
-              <button className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500">
-                <AiOutlineLike className="text-base" />
-                <span>Beğen</span>
-              </button>
+              {existUser != null &&
+              like.likes.includes(parseInt(existUser.id)) ? (
+                <button
+                  {...(loading && { disabled: true })}
+                  onClick={() => DeleteComment()}
+                  className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs text-red-500 border-red-500"
+                >
+                  <AiFillLike className="text-base" />
+                  <span>
+                    Beğen {like.count > 0 && "(" + like.count + ")"}
+                  </span>
+                </button>
+              ) : (
+                <button
+                {...(loading && { disabled: true })}
+                  onClick={() => LikeComment()}
+                  className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500"
+                >
+                  <AiOutlineLike className="text-base" />
+                  <span>
+                    Beğen {like.count > 0 && "(" + like.count + ")"}
+                  </span>
+                </button>
+              )}
+
               <button className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500">
                 <AiOutlineComment className="text-base" />
                 <span>Yorum Yap</span>

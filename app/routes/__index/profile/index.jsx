@@ -27,10 +27,13 @@ import {
   BsFillPencilFill,
   BsThreeDots,
   BsHeart,
+  BsShopWindow,
+  BsLayoutTextSidebarReverse,
   BsBookmark,
   BsCalendar,
-  BsCursor,
+  BsArrowBarRight,
   BsAspectRatio,
+  BsGear,
 } from "react-icons/bs";
 import SwiperProfile from "~/components/SwiperProfile";
 import useCommentSearch from "~/components/useCommentSearch";
@@ -40,6 +43,8 @@ const { Option } = Select;
 const { TextArea } = Input;
 import { put } from "axios";
 import moment from "moment";
+import seoHelp from "~/hooks/seoHelp";
+import { Link } from "react-router-dom";
 
 export const loader = async ({ request }) => {
   const param = new URL(request.url).searchParams.get("userid");
@@ -62,7 +67,7 @@ export const loader = async ({ request }) => {
     }
   );
   const userProfile = await req.json();
-  console.log(userProfile);
+  console.log("aha burda",userProfile);
 
   if (
     userProfile.data == null ||
@@ -104,6 +109,7 @@ const profile = () => {
     useLoaderData();
   const [okButton, setOkButton] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [images, setImages] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -160,7 +166,9 @@ const profile = () => {
           )
       ));
 
-    existUser &&
+      console.log("profile tarafında",existUser)
+
+    existUser && existUser.userPhoto != "defaultuser.png" &&
       setFileList([
         {
           uid: "-1",
@@ -199,9 +207,10 @@ const profile = () => {
     for (var key in userdata) {
       formData.append(key, userdata[key]);
     }
-    fileList[0] &&
-      fileList.forEach((item) => {
-        formData.append("uploadImage", item.originFileObj);
+
+    images[0] &&
+    images.forEach((item) => {
+        formData.append("uploadImage", item);
       });
 
     await put(API + "/User?id=" + existUser.userId, formData, {
@@ -217,6 +226,36 @@ const profile = () => {
   };
 
   //#region Image User
+
+  async function fetchUrlToImage(imageList, path) {
+    const symbols = [];
+    console.log("filelist", imageList);
+    for await (let file of imageList) {
+      if (file.status === "done") {
+        const response = await fetch(
+          API + `/Business/GetImage?path=${path}&name=${file.name}`,
+          {
+            headers: {
+              ApiKey: API_KEY,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const blob = await response.blob();
+        const filel = new File([blob], file.name, { type: blob.type });
+        symbols.push(filel);
+      } else {
+        symbols.push(file.originFileObj);
+      }
+    }
+    console.log("resimler", symbols);
+    return symbols;
+  }
+
+  useEffect(() => {
+    fetchUrlToImage(fileList, "user")
+      .then(files=>setImages(files));
+  }, [fileList]);
 
   const handleCancel = () => setPreviewVisible(false);
 
@@ -300,7 +339,7 @@ const profile = () => {
                   {location}
                 </span>
               )}
-              <div className="flex space-x-6 pt-6">
+              <div className="flex space-x-6 pt-4">
                 <div className="flex flex-col">
                   <span className="font-semibold text-base tracking-tight">
                     Yorum
@@ -332,7 +371,7 @@ const profile = () => {
                     show();
                     form.resetFields();
                     setOkButton(false);
-                    setFileList([
+                    existUser.userPhoto != "defaultuser.png" && setFileList([
                       {
                         uid: "-1",
                         name: existUser.userPhoto,
@@ -607,7 +646,7 @@ const profile = () => {
                         <TextArea
                           rows={4}
                           placeholder="Kısaca kendiniz ile ilgili bilgi verin"
-                          maxLength={240}
+                          maxLength={120}
                           className="relative shadow z-0 appearance-none border rounded-[2px] w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                       </Form.Item>
@@ -678,20 +717,33 @@ const profile = () => {
           <div className="p-4 bg-white">
             <div className="pt-2 font-semibold text-gray-500 space-y-2">
               <span className="flex items-center bg-gray-100 p-2 rounded-lg">
-                <BsCalendar className="text-gray-500 mr-2 text-lg" />
-                Profil
-              </span>
-              <span className="flex items-center p-2 rounded-lg">
-                <BsCursor className="text-gray-500 mr-2 text-lg" />
+                <BsLayoutTextSidebarReverse className="text-gray-500 mr-2 text-lg" />
                 İncelemeler
               </span>
               <span className="flex items-center p-2 rounded-lg">
                 <BsAspectRatio className="text-gray-500 mr-2 text-lg" />
                 Fotoğraflar
               </span>
+              <span className="flex items-center p-2 rounded-lg">
+                <BsHeart className="text-gray-500 mr-2 text-lg" />
+                Beğenilen Yorumlar
+              </span>
+              <span className="flex items-center p-2 rounded-lg">
+                <BsShopWindow className="text-gray-500 mr-2 text-lg" />
+                Kaydedilen İşletmeler
+              </span>
+              <span className="flex items-center p-2 rounded-lg">
+                <BsGear className="text-gray-500 mr-2 text-lg" />
+                Ayarlar
+              </span>
+              <span className="flex items-center p-2 rounded-lg">
+                <BsArrowBarRight className="text-gray-500 mr-2 text-lg" />
+                Çıkış Yap
+              </span>
             </div>
           </div>
         </div>
+
         <div className="w-2/4 space-y-4">
           {comments.map((comment, index) => {
             if (comments.length === index + 1) {
@@ -708,9 +760,21 @@ const profile = () => {
                         src={`${API_IMAGES}business/thumbnail${comment.businessImage}`}
                       />
                       <div className="flex-col flex">
-                        <span className="text-blue-500">
-                          {comment.businessName}
-                        </span>
+                        <div>
+                          <span>
+                            <Link
+                              target="_blank"
+                              to={`/isletme/${
+                                seoHelp(comment.businessName) +
+                                "-" +
+                                comment.businessId
+                              }`}
+                              className="hover:text-red-500 font-bold text-[15px]"
+                            >
+                              {comment.businessName}
+                            </Link>
+                          </span>
+                        </div>
                         <span className="text-xs flex items-center">
                           <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
                           {comment.location}
@@ -759,9 +823,21 @@ const profile = () => {
                         src={`${API_IMAGES}business/thumbnail${comment.businessImage}`}
                       />
                       <div className="flex-col flex">
-                        <span className="text-blue-500">
-                          {comment.businessName}
-                        </span>
+                        <div>
+                          <span>
+                            <Link
+                              target="_blank"
+                              to={`/isletme/${
+                                seoHelp(comment.businessName) +
+                                "-" +
+                                comment.businessId
+                              }`}
+                              className="hover:text-red-500 font-bold text-[15px]"
+                            >
+                              {comment.businessName}
+                            </Link>
+                          </span>
+                        </div>
                         <span className="text-xs flex items-center">
                           <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
                           {comment.location}

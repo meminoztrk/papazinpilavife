@@ -1,3 +1,4 @@
+import logo from "public/pngegg.png";
 const Projection = ({ state }) => {
  
   return (
@@ -10,7 +11,7 @@ const Projection = ({ state }) => {
         <img
           alt="logo"
           className="object-cover w-1/5"
-          src="https://seeklogo.com/images/L/logo-com-hr-logo-5636A4D2D5-seeklogo.com.png"
+          src={logo}
         />
       </div>
     </div>
