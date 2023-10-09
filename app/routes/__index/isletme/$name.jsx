@@ -179,9 +179,8 @@ const Business = () => {
                 <span>İşletme Kaydedildi</span>
               </span>
             ),
-            description:
-              "İşletme başarı ile kaydedildi.",
-          })
+            description: "İşletme başarı ile kaydedildi.",
+          });
         });
     } else {
       handleLoginModal(true);
@@ -724,6 +723,8 @@ const Business = () => {
               <LoginModal
                 loginModal={loginModal}
                 handleLoginModal={handleLoginModal}
+                API={API}
+                API_KEY={API_KEY}
               />
               <Modal
                 {...modalProps}
@@ -873,8 +874,7 @@ const Business = () => {
                   </Form>
                 </Spin>
               </Modal>
-              {existUser != null &&
-              like.includes(parseInt(existUser.id)) ? (
+              {existUser != null && like.includes(parseInt(existUser.id)) ? (
                 <button
                   {...(loading && { disabled: true })}
                   onClick={() => UnlikeBusiness()}

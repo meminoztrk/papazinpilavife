@@ -132,7 +132,7 @@ export default function IndexRoute() {
                 />
                 <div className="flex items-center justify-between pt-1 px-1">
                   <p className="text-[15px] font-medium text-left">
-                    Smile Steakhouse
+                    Smile Steakhouse 
                   </p>
                   <div className="flex items-center">
                     <span className="mr-1 text-xs">(98)</span>

@@ -37,7 +37,6 @@ export default function IndexRoute() {
   }, [existUser]);
 
   useEffect(() => {
-    console.log(user);
     setHidden(true)
   }, []);
 

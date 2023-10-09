@@ -1789,6 +1789,10 @@ video {
   padding-left: 1.25rem !important;
 }
 
+.pb-20{
+  padding-bottom: 5rem !important;
+}
+
 .text-left{
   text-align: left !important;
 }
@@ -3002,6 +3006,11 @@ body {
 .hover\:text-black:hover{
   --tw-text-opacity: 1 !important;
   color: rgb(0 0 0 / var(--tw-text-opacity)) !important;
+}
+
+.hover\:text-red-800:hover{
+  --tw-text-opacity: 1 !important;
+  color: rgb(153 27 27 / var(--tw-text-opacity)) !important;
 }
 
 .hover\:text-orange-500:hover{

@@ -13,12 +13,12 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 import { userPrefs } from "~/hooks/cookie";
 
-const LoginModal = ({ loginModal, handleLoginModal }) => {
+const LoginModal = ({ loginModal, handleLoginModal, API, API_KEY }) => {
   const [existUser, handleChange] = useOutletContext();
   const [error, setError] = useState("");
   const [form] = Form.useForm();
   let navigate = useNavigate();
-  const { API, API_KEY } = useLoaderData();
+  // const { API, API_KEY } = useLoaderData();
 
   const glogin = async (credResponse) => {
     var decoded = jwtDecode(credResponse.credential);

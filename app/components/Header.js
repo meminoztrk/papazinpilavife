@@ -180,7 +180,7 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
               </>
             ) : (
               <div>
-                <Dropdown transitionName="" overlay={menu} trigger={["click"]}>
+                <Dropdown getPopupContainer={(trigger) => trigger.parentNode} transitionName="" overlay={menu} trigger={["click"]}>
                   <button className="ml-4 hover:text-gray-500 flex items-center">
                     <AiOutlineUser size={19} className="cursor-pointer" />
                     <span className="pl-2">Hesabım</span>

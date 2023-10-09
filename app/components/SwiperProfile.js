@@ -39,7 +39,7 @@ const SwiperProfile = ({ comment, user, API_IMAGES }) => {
                       surname: user.surname,
                       userImage: user.userPhoto,
                       rate: comment.rate,
-                      totalComments: user.totalComment,
+                      totalComment: user.totalComment,
                       comment: comment.comment,
                       commentType: comment.commentType,
                       created: comment.created

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useModalForm } from "sunflower-antd";
 import {
   Button,
@@ -6,6 +6,7 @@ import {
   Empty,
   Form,
   Input,
+  Menu,
   Modal,
   Rate,
   Select,
@@ -20,8 +21,14 @@ import {
   HomeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { useLoaderData, useNavigate, useOutletContext } from "@remix-run/react";
-import { getJwt, getUser, userPrefs } from "~/hooks/cookie";
+import {
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from "@remix-run/react";
+import { getJwt, getUser, removeToken, userPrefs } from "~/hooks/cookie";
 import {
   BsGeoAltFill,
   BsFillPencilFill,
@@ -35,20 +42,18 @@ import {
   BsAspectRatio,
   BsGear,
 } from "react-icons/bs";
-import SwiperProfile from "~/components/SwiperProfile";
-import useCommentSearch from "~/components/useCommentSearch";
 import Province from "~/data/Province.json";
 import { redirect } from "@remix-run/node";
 const { Option } = Select;
 const { TextArea } = Input;
 import { put } from "axios";
 import moment from "moment";
-import seoHelp from "~/hooks/seoHelp";
 import { Link } from "react-router-dom";
 
 export const loader = async ({ request }) => {
-  const param = new URL(request.url).searchParams.get("userid");
+  let param = new URL(request.url).searchParams.get("userid");
   const jwt = getJwt(request.headers.get("cookie"));
+  let pathname = new URL(request.url).pathname;
 
   const user = await getUser(
     jwt,
@@ -66,12 +71,13 @@ export const loader = async ({ request }) => {
       },
     }
   );
+
   const userProfile = await req.json();
-  console.log("aha burda",userProfile);
 
   if (
     userProfile.data == null ||
-    (userProfile.data.isAdmin && userProfile.data.isBusiness)
+    (userProfile.data.isAdmin && userProfile.data.isBusiness) ||
+    (user.userId != userProfile.data.userId && pathname && pathname.split("/").pop() === "ayarlar")
   ) {
     return redirect("/uyelik");
   }
@@ -113,33 +119,8 @@ const profile = () => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-
-  //buradan
-  const [pageNumber, setPageNumber] = useState(1);
-
-  const { comments, hasMore, loading, error } = useCommentSearch(
-    userProfile.userId,
-    pageNumber,
-    API,
-    API_KEY
-  );
-
-  const observer = useRef();
-  const lastCommentElementRef = useCallback(
-    (node) => {
-      if (loading) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPageNumber((prevPageNumber) => prevPageNumber + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [loading, hasMore]
-  );
-
-  //buraya
+  const loc = useLocation();
+  const origin = loc.pathname.split("/").pop();
 
   useEffect(() => {
     existUser &&
@@ -166,9 +147,8 @@ const profile = () => {
           )
       ));
 
-      console.log("profile tarafında",existUser)
-
-    existUser && existUser.userPhoto != "defaultuser.png" &&
+    existUser &&
+      existUser.userPhoto != "defaultuser.png" &&
       setFileList([
         {
           uid: "-1",
@@ -209,7 +189,7 @@ const profile = () => {
     }
 
     images[0] &&
-    images.forEach((item) => {
+      images.forEach((item) => {
         formData.append("uploadImage", item);
       });
 
@@ -229,7 +209,6 @@ const profile = () => {
 
   async function fetchUrlToImage(imageList, path) {
     const symbols = [];
-    console.log("filelist", imageList);
     for await (let file of imageList) {
       if (file.status === "done") {
         const response = await fetch(
@@ -248,13 +227,11 @@ const profile = () => {
         symbols.push(file.originFileObj);
       }
     }
-    console.log("resimler", symbols);
     return symbols;
   }
 
   useEffect(() => {
-    fetchUrlToImage(fileList, "user")
-      .then(files=>setImages(files));
+    fetchUrlToImage(fileList, "user").then((files) => setImages(files));
   }, [fileList]);
 
   const handleCancel = () => setPreviewVisible(false);
@@ -371,14 +348,15 @@ const profile = () => {
                     show();
                     form.resetFields();
                     setOkButton(false);
-                    existUser.userPhoto != "defaultuser.png" && setFileList([
-                      {
-                        uid: "-1",
-                        name: existUser.userPhoto,
-                        status: "done",
-                        url: API_IMAGES + "user/" + existUser.userPhoto,
-                      },
-                    ]);
+                    existUser.userPhoto != "defaultuser.png" &&
+                      setFileList([
+                        {
+                          uid: "-1",
+                          name: existUser.userPhoto,
+                          status: "done",
+                          url: API_IMAGES + "user/" + existUser.userPhoto,
+                        },
+                      ]);
                   }}
                   className="text-xl hover:text-gray-500 cursor-pointer"
                 />
@@ -716,170 +694,80 @@ const profile = () => {
         <div className="w-1/4">
           <div className="p-4 bg-white">
             <div className="pt-2 font-semibold text-gray-500 space-y-2">
-              <span className="flex items-center bg-gray-100 p-2 rounded-lg">
+              <Link
+                to={`/profile?userid=${userProfile.userId}`}
+                className={`flex items-center ${
+                  origin == "profile" && "bg-gray-100"
+                } hover:bg-gray-100 hover:text-gray-500 p-2 rounded-lg`}
+              >
                 <BsLayoutTextSidebarReverse className="text-gray-500 mr-2 text-lg" />
                 İncelemeler
-              </span>
-              <span className="flex items-center p-2 rounded-lg">
+              </Link>
+              <Link
+                to={`/profile/fotograflar?userid=${userProfile.userId}`}
+                className={`flex items-center ${
+                  origin == "fotograflar" && "bg-gray-100"
+                } hover:bg-gray-100 hover:text-gray-500 p-2 rounded-lg`}
+              >
                 <BsAspectRatio className="text-gray-500 mr-2 text-lg" />
                 Fotoğraflar
-              </span>
-              <span className="flex items-center p-2 rounded-lg">
+              </Link>
+              <Link
+                to={`/profile/begenilenyorumlar?userid=${userProfile.userId}`}
+                className={`flex items-center ${
+                  origin == "begenilenyorumlar" && "bg-gray-100"
+                } hover:bg-gray-100 hover:text-gray-500 p-2 rounded-lg`}
+              >
                 <BsHeart className="text-gray-500 mr-2 text-lg" />
                 Beğenilen Yorumlar
-              </span>
-              <span className="flex items-center p-2 rounded-lg">
+              </Link>
+              <Link
+                to={`/profile/kaydedilenisletmeler?userid=${userProfile.userId}`}
+                className={`flex items-center ${
+                  origin == "kaydedilenisletmeler" && "bg-gray-100"
+                } hover:bg-gray-100 hover:text-gray-500 p-2 rounded-lg`}
+              >
                 <BsShopWindow className="text-gray-500 mr-2 text-lg" />
                 Kaydedilen İşletmeler
-              </span>
-              <span className="flex items-center p-2 rounded-lg">
-                <BsGear className="text-gray-500 mr-2 text-lg" />
-                Ayarlar
-              </span>
-              <span className="flex items-center p-2 rounded-lg">
-                <BsArrowBarRight className="text-gray-500 mr-2 text-lg" />
-                Çıkış Yap
-              </span>
+              </Link>
+              {currentUser.userId && currentUser.userId === userProfile.userId && (
+                <>
+                  <Link
+                    to={`/profile/ayarlar?userid=${userProfile.userId}`}
+                    className={`flex items-center ${
+                      origin == "ayarlar" && "bg-gray-100"
+                    } hover:bg-gray-100 hover:text-gray-500 p-2 rounded-lg`}
+                  >
+                    <BsGear className="text-gray-500 mr-2 text-lg" />
+                    Ayarlar
+                  </Link>
+                  <span
+                    onClick={() => {
+                      navigate("/");
+                      setTimeout(() => removeToken(handleChange), 500);
+                    }}
+                    className="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-100 hover:text-gray-500"
+                  >
+                    <BsArrowBarRight className="text-gray-500 mr-2 text-lg" />
+                    Çıkış Yap
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="w-2/4 space-y-4">
-          {comments.map((comment, index) => {
-            if (comments.length === index + 1) {
-              return (
-                <div
-                  ref={lastCommentElementRef}
-                  key={index}
-                  className="bg-white w-full"
-                >
-                  <div className="p-4">
-                    <div className="flex gap-x-3">
-                      <img
-                        className="w-16 h-16 rounded"
-                        src={`${API_IMAGES}business/thumbnail${comment.businessImage}`}
-                      />
-                      <div className="flex-col flex">
-                        <div>
-                          <span>
-                            <Link
-                              target="_blank"
-                              to={`/isletme/${
-                                seoHelp(comment.businessName) +
-                                "-" +
-                                comment.businessId
-                              }`}
-                              className="hover:text-red-500 font-bold text-[15px]"
-                            >
-                              {comment.businessName}
-                            </Link>
-                          </span>
-                        </div>
-                        <span className="text-xs flex items-center">
-                          <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
-                          {comment.location}
-                        </span>
-                        <span className="text-xs pt-2 text-gray-400">
-                          {moment(comment.created).format("DD.MM.yyyy")}{" "}
-                          tarihinde yorum yapıldı.
-                        </span>
-                      </div>
-                    </div>
-                    <div className="pt-2">
-                      <Rate
-                        className="text-[15px] text-red-500 font-bold"
-                        disabled
-                        defaultValue={comment.rate}
-                      />
-                    </div>
-                    <div className="pt-1">{comment.comment}</div>
-                  </div>
-                  <div className="relative">
-                    <SwiperProfile
-                      comment={comment}
-                      user={userProfile}
-                      API_IMAGES={API_IMAGES}
-                    />
-                  </div>
-                  <div className="p-4 flex items-center gap-x-3 text-xs">
-                    <button className="flex items-center gap-x-1 hover:text-red-500">
-                      <BsHeart />
-                      Beğen
-                    </button>
-                    <button className="flex items-center gap-x-1 hover:text-red-500">
-                      <BsBookmark />
-                      Kaydet
-                    </button>
-                  </div>
-                </div>
-              );
-            } else {
-              return (
-                <div key={index} className="bg-white w-full">
-                  <div className="p-4">
-                    <div className="flex gap-x-3">
-                      <img
-                        className="w-16 h-16 rounded"
-                        src={`${API_IMAGES}business/thumbnail${comment.businessImage}`}
-                      />
-                      <div className="flex-col flex">
-                        <div>
-                          <span>
-                            <Link
-                              target="_blank"
-                              to={`/isletme/${
-                                seoHelp(comment.businessName) +
-                                "-" +
-                                comment.businessId
-                              }`}
-                              className="hover:text-red-500 font-bold text-[15px]"
-                            >
-                              {comment.businessName}
-                            </Link>
-                          </span>
-                        </div>
-                        <span className="text-xs flex items-center">
-                          <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
-                          {comment.location}
-                        </span>
-                        <span className="text-xs pt-2 text-gray-400">
-                          {moment(comment.created).format("DD.MM.yyyy")}{" "}
-                          tarihinde yorum yapıldı.
-                        </span>
-                      </div>
-                    </div>
-                    <div className="pt-2">
-                      <Rate
-                        className="text-[15px] text-red-500 font-bold"
-                        disabled
-                        defaultValue={comment.rate}
-                      />
-                    </div>
-                    <div className="pt-1">{comment.comment}</div>
-                  </div>
-                  <div className="relative">
-                    <SwiperProfile
-                      comment={comment}
-                      user={userProfile}
-                      API_IMAGES={API_IMAGES}
-                    />
-                  </div>
-                  <div className="p-4 flex items-center gap-x-3 text-xs">
-                    <button className="flex items-center gap-x-1 hover:text-red-500">
-                      <BsHeart />
-                      Beğen
-                    </button>
-                    <button className="flex items-center gap-x-1 hover:text-red-500">
-                      <BsBookmark />
-                      Kaydet
-                    </button>
-                  </div>
-                </div>
-              );
-            }
-          })}
-          <div>{loading && <Skeleton active />}</div>
-          <div>{error && "Error"}</div>
+        <div className="w-2/4">
+          <Outlet
+            context={[
+              existUser,
+              handleChange,
+              userProfile,
+              API,
+              API_KEY,
+              API_IMAGES,
+            ]}
+          />
         </div>
 
         <div className="w-1/4">

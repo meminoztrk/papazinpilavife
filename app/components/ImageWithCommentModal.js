@@ -12,8 +12,6 @@ import { Rate } from "antd";
 import { AiOutlineComment, AiOutlineLike } from "react-icons/ai";
 import moment from "moment";
 
-
-
 const ImageWithCommentModal = ({ setModal, imageData, IMAGES }) => {
   // const links = [
   //   "https://s3-media0.fl.yelpcdn.com/bphoto/jMQZojTqKvu3zw7Ap2E_Kg/o.jpg",
@@ -207,7 +205,7 @@ const ImageWithCommentModal = ({ setModal, imageData, IMAGES }) => {
   return (
     <div className="z-50 fixed right-0 top-0 bottom-0 left-0 flex flex-col m-0 p-10 bg-black bg-opacity-80">
       <div className="relative bg-white h-full w-full flex rounded-lg">
-        <div className="group w-2/3 flex justify-center relative h-auto bg-black rounded-l-lg text-white select-none">
+        <div className={`group ${(imageData.data.businessName || imageData.data.name) ? "w-2/3" : "w-full"} flex justify-center relative h-auto bg-black rounded-l-lg text-white select-none`}>
           <div className="flex justify-center select-none">
             <img
               className="object-contain w-full h-full currentImage select-none"
@@ -257,106 +255,113 @@ const ImageWithCommentModal = ({ setModal, imageData, IMAGES }) => {
           </div>
         </div>
 
-        <div className="w-1/3 h-auto overflow-auto rounded-r-lg">
-          {imageData.data.businessName ? (
-            <div className="p-4">
-              <div className="flex gap-x-3">
-                <img
-                  className="w-16 h-16 rounded-lg"
-                  src={IMAGES + "/business/" + imageData.data.images[0]}
-                />
-                <div className="flex flex-col">
-                  <div className="flex-col flex">
-                    <span className="font-bold text-base">
-                      {imageData.data.businessName}
-                    </span>
-                    <span className="text-xs flex items-center">
-                      <BsGeoAltFill className="text-gray-500 mr-1" />
-                      {imageData.data.neighborhood}, {imageData.data.district} /{" "}
-                      {imageData.data.city}
-                    </span>
+        {(imageData.data.businessName || imageData.data.name) && (
+          <div className="w-1/3 h-auto overflow-auto rounded-r-lg">
+            {imageData.data.businessName ? (
+              <div className="p-4">
+                <div className="flex gap-x-3">
+                  <img
+                    className="w-16 h-16 rounded-lg"
+                    src={IMAGES + "/business/" + imageData.data.images[0]}
+                  />
+                  <div className="flex flex-col">
+                    <div className="flex-col flex">
+                      <span className="font-bold text-base">
+                        {imageData.data.businessName}
+                      </span>
+                      <span className="text-xs flex items-center">
+                        <BsGeoAltFill className="text-gray-500 mr-1" />
+                        {imageData.data.neighborhood}, {imageData.data.district}{" "}
+                        / {imageData.data.city}
+                      </span>
+                    </div>
+                    <div className="mt-1">
+                      <Rate
+                        className="text-[13px] text-red-500 font-bold bg-white rounded-lg mr-2"
+                        disabled
+                        allowHalf
+                        defaultValue={imageData.data.rate}
+                      />
+                      <span className="text-gray-600 font-extralight">
+                        {imageData.data.rate} ({imageData.data.commentCount}{" "}
+                        inceleme)
+                      </span>
+                    </div>
                   </div>
-                  <div className="mt-1">
-                    <Rate
-                      className="text-[13px] text-red-500 font-bold bg-white rounded-lg mr-2"
-                      disabled
-                      allowHalf
-                      defaultValue={imageData.data.rate}
-                    />
-                    <span className="text-gray-600 font-extralight">
-                      {imageData.data.rate} ({imageData.data.commentCount}{" "}
-                      inceleme)
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-3 text-[15px]">{imageData.data.minHeader}</div>
-
-              <div className="pt-3 italic">{imageData.data.about}</div>
-            </div>
-          ) : (
-            <div className="p-4 flex flex-col overflow-auto">
-              <div className="flex gap-x-3">
-                <img
-                  className="w-16 h-16 rounded-lg"
-                  src={IMAGES + "/user/" + imageData.data.userImage}
-                />
-                <div className="flex flex-col">
-                  <div className="flex-col flex">
-                    <span className="font-semibold">
-                      {imageData.data.name} {imageData.data.surname[0]}.
-                    </span>
-                    <span className="text-xs flex items-center">
-                      {imageData.data.totalComment} yorum
-                    </span>
-                  </div>
-                  <div className="mt-1">
-                    <Rate
-                      className="text-[13px] text-red-500 font-bold bg-white rounded-lg mr-2"
-                      disabled
-                      allowHalf
-                      defaultValue={imageData.data.rate}
-                    />
-                    <span className="text-gray-600 font-extralight">
-                      {imageData.data.rate} (puan)
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="mt-3 text-xs font-light">{moment(imageData.data.created).format("DD.MM.yyyy")} tarihinde yorum yapıldı.</div>
-                <div className="pt-4 space-x-2">
-                  {imageData.data.commentType.split(",,").map((x, i) => (
-                    <span className="rounded-lg border p-1" key={i}>
-                      {x}
-                    </span>
-                  ))}
                 </div>
 
-                <div className="pt-5 text-[15px]">
-                  {imageData.data.comment} 
+                <div className="pt-3 text-[15px]">
+                  {imageData.data.minHeader}
                 </div>
+
+                <div className="pt-3 italic">{imageData.data.about}</div>
               </div>
-              <div className="flex items-center justify-start space-x-2 mt-2">
-                <button className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500">
-                  <AiOutlineLike className="text-base" />
-                  <span>Beğen</span>
-                </button>
-                {/* <button className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500">
+            ) : (
+              <div className="p-4 flex flex-col overflow-auto">
+                <div className="flex gap-x-3">
+                  <img
+                    className="w-16 h-16 rounded-lg"
+                    src={IMAGES + "/user/" + imageData.data.userImage}
+                  />
+                  <div className="flex flex-col">
+                    <div className="flex-col flex">
+                      <span className="font-semibold">
+                        {imageData.data.name} {imageData.data.surname[0]}.
+                      </span>
+                      <span className="text-xs flex items-center">
+                        {imageData.data.totalComment} yorum
+                      </span>
+                    </div>
+                    <div className="mt-1">
+                      <Rate
+                        className="text-[13px] text-red-500 font-bold bg-white rounded-lg mr-2"
+                        disabled
+                        allowHalf
+                        defaultValue={imageData.data.rate}
+                      />
+                      <span className="text-gray-600 font-extralight">
+                        {imageData.data.rate} (puan)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="mt-3 text-xs font-light">
+                    {moment(imageData.data.created).format("DD.MM.yyyy")}{" "}
+                    tarihinde yorum yapıldı.
+                  </div>
+                  <div className="pt-4 space-x-2">
+                    {imageData.data.commentType.split(",,").map((x, i) => (
+                      <span className="rounded-lg border p-1" key={i}>
+                        {x}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="pt-5 text-[15px]">
+                    {imageData.data.comment}
+                  </div>
+                </div>
+                <div className="flex items-center justify-start space-x-2 mt-2">
+                  <button className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500">
+                    <AiOutlineLike className="text-base" />
+                    <span>Beğen</span>
+                  </button>
+                  {/* <button className="border flex items-center space-x-1 py-1 px-2 rounded-lg text-xs hover:text-red-500 hover:border-red-500">
                   <AiOutlineComment className="text-base" />
                   <span>Yorum Yap</span>
                 </button> */}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         <button
           onClick={() =>
             setModal({ visible: false, data: null, currentIndex: 0 })
           }
-          className="absolute right-0 top-0 p-3 hover:text-red-500"
+          className="absolute right-0 top-0 p-3 text-red-500 hover:text-red-800"
         >
           <BsXCircle size={24} />
         </button>
