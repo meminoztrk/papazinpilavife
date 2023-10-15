@@ -297,9 +297,12 @@ export const Header = ({ openModal, data, existUser, handleChange }) => {
           >
             Burger
           </Link>
-          <ul className="md:flex hidden  hover:text-white hover:cursor-pointer space-x-4">
+          <Link
+            to={"/administrationlogin"}
+            className="md:flex hidden hover:text-white hover:cursor-pointer space-x-4"
+          >
             Ev Hizmetleri
-          </ul>
+          </Link>
           <ul className="md:flex hidden  hover:text-white hover:cursor-pointer space-x-4">
             Araba Servisleri
           </ul>

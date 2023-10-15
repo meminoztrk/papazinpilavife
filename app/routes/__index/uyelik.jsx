@@ -8,7 +8,6 @@ export const loader = async () => {
     API: process.env.REACT_APP_API,
     API_KEY: process.env.REACT_APP_API_KEY,
   };
-  console.log(data);
   return data;
 };
 

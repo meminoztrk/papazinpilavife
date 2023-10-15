@@ -6,7 +6,7 @@ import { useLoaderData } from '@remix-run/react';
 import { post } from 'axios';
 // import { redirect } from '@remix-run/node';
 import { useOutletContext } from "react-router-dom";
-import CKEditor from './../../../components/CKEditor';
+import CKEditor from '../../../components/CKEditor';
 const { Option } = Select;
 
 

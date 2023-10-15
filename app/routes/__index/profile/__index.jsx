@@ -76,7 +76,7 @@ export const loader = async ({ request }) => {
 
   if (
     userProfile.data == null ||
-    (userProfile.data.isAdmin && userProfile.data.isBusiness) ||
+    (userProfile.data.isBusiness) ||
     (user.userId != userProfile.data.userId && pathname && pathname.split("/").pop() === "ayarlar")
   ) {
     return redirect("/uyelik");

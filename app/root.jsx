@@ -72,7 +72,7 @@ export const meta = ({ data }) => {
 export default function App() {
   const data = useLoaderData();
   const transition = useTransition();
-  const [hidden,setHidden] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     // when the state is idle then we can to complete the progress bar
@@ -109,6 +109,7 @@ function Document({ children, title }) {
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
       </body>
     </html>
   );

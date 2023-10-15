@@ -5,7 +5,7 @@ import { useFavoriteComment } from "~/components/useInfiniteScrolling";
 import seoHelp from "~/hooks/seoHelp";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { Rate, Skeleton } from "antd";
+import { Empty, Rate, Skeleton } from "antd";
 import { BsBookmark, BsGeoAltFill, BsHeart } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import LoginModal from "~/components/LoginModal";
@@ -105,205 +105,215 @@ const begenilenyorumlar = () => {
 
   return (
     <div className="space-y-4">
-      {comments.map((comment, index) => {
-        if (comments.length === index + 1) {
-          return (
-            <div
-              ref={lastCommentElementRef}
-              key={index}
-              className="bg-white w-full"
-            >
-              <div className="p-4">
-                <div className="flex gap-x-3">
-                  <img
-                    className="w-16 h-16 rounded"
-                    src={`${API_IMAGES}user/thumbnail${comment.userPhoto}`}
-                  />
-                  <div className="flex-col flex">
-                    <div>
-                      <span>
-                        <Link
-                          target="_blank"
-                          to={`/profile?userid=/${comment.userId}`}
-                          className="text-red-700 font-bold text-[15px]"
-                        >
-                          {comment.userName + " " + comment.userSurname}
-                        </Link>
+      {comments.length > 0 ? (
+        comments.map((comment, index) => {
+          if (comments.length === index + 1) {
+            return (
+              <div
+                ref={lastCommentElementRef}
+                key={index}
+                className="bg-white w-full"
+              >
+                <div className="p-4">
+                  <div className="flex gap-x-3">
+                    <img
+                      className="w-16 h-16 rounded"
+                      src={`${API_IMAGES}user/thumbnail${comment.userPhoto}`}
+                    />
+                    <div className="flex-col flex">
+                      <div>
+                        <span>
+                          <Link
+                            target="_blank"
+                            to={`/profile?userid=/${comment.userId}`}
+                            className="text-red-700 font-bold text-[15px]"
+                          >
+                            {comment.userName + " " + comment.userSurname}
+                          </Link>
+                        </span>
+                      </div>
+                      <div>
+                        <span>
+                          <Link
+                            target="_blank"
+                            to={`/isletme/${
+                              seoHelp(comment.businessName) +
+                              "-" +
+                              comment.businessId
+                            }`}
+                            className="hover:text-red-500 font-semibold text-[14px]"
+                          >
+                            {comment.businessName}
+                          </Link>
+                        </span>
+                      </div>
+                      <span className="text-xs flex items-center">
+                        <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
+                        {comment.location}
                       </span>
                     </div>
-                    <div>
-                      <span>
-                        <Link
-                          target="_blank"
-                          to={`/isletme/${
-                            seoHelp(comment.businessName) +
-                            "-" +
-                            comment.businessId
-                          }`}
-                          className="hover:text-red-500 font-semibold text-[14px]"
-                        >
-                          {comment.businessName}
-                        </Link>
-                      </span>
-                    </div>
-                    <span className="text-xs flex items-center">
-                      <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
-                      {comment.location}
-                    </span>
                   </div>
-                </div>
-                <div className="pt-1">
-                  <span className="text-xs text-gray-400">
-                    {moment(comment.created).format("DD.MM.yyyy")} tarihinde
-                    yorum yapıldı.
-                  </span>
-                </div>
-                <div className="">
-                  <Rate
-                    className="text-[15px] text-red-500 font-bold"
-                    disabled
-                    defaultValue={comment.rate}
-                  />
-                </div>
-                <div className="pt-1">{comment.comment}</div>
-              </div>
-              <div className="relative">
-                <SwiperProfile
-                  comment={comment}
-                  user={{
-                    name: comment.userName,
-                    surname: comment.userSurname,
-                    userPhoto: comment.userPhoto,
-                    totalComment: comment.totalComment,
-                  }}
-                  API_IMAGES={API_IMAGES}
-                />
-              </div>
-              <div className="p-4 flex items-center gap-x-3 text-xs">
-                {existUser != null &&
-                comment.likedUsers.includes(parseInt(existUser.id)) ? (
-                  <button
-                    {...(loadingLike && { disabled: true })}
-                    onClick={() => DeleteComment(comment.id, index)}
-                    className="flex items-center gap-x-1 text-red-500 border-red-500"
-                  >
-                    <AiFillLike className="text-base" />
-                    <span>
-                      Beğen{" "}
-                      {comment.likedUsers.count > 0 &&
-                        "(" + comment.likedUsers.count + ")"}
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    {...(loadingLike && { disabled: true })}
-                    onClick={() => LikeComment(comment.id, index)}
-                    className="flex items-center gap-x-1  hover:text-red-500 hover:border-red-500"
-                  >
-                    <AiOutlineLike className="text-base" />
-                    <span>
-                      Beğen{" "}
-                      {comment.likedUsers.count > 0 &&
-                        "(" + comment.likedUsers.count + ")"}
-                    </span>
-                  </button>
-                )}
-                <button className="flex items-center gap-x-1 hover:text-red-500">
-                  <BsBookmark />
-                  Kaydet
-                </button>
-              </div>
-            </div>
-          );
-        } else {
-          return (
-            <div key={index} className="bg-white w-full">
-              <div className="p-4">
-                <div className="flex gap-x-3">
-                  <img
-                    className="w-16 h-16 rounded"
-                    src={`${API_IMAGES}business/thumbnail${comment.businessImage}`}
-                  />
-                  <div className="flex-col flex">
-                    <div>
-                      <span>
-                        <Link
-                          target="_blank"
-                          to={`/isletme/${
-                            seoHelp(comment.businessName) +
-                            "-" +
-                            comment.businessId
-                          }`}
-                          className="hover:text-red-500 font-bold text-[15px]"
-                        >
-                          {comment.businessName}
-                        </Link>
-                      </span>
-                    </div>
-                    <span className="text-xs flex items-center">
-                      <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
-                      {comment.location}
-                    </span>
-                    <span className="text-xs pt-2 text-gray-400">
+                  <div className="pt-1">
+                    <span className="text-xs text-gray-400">
                       {moment(comment.created).format("DD.MM.yyyy")} tarihinde
                       yorum yapıldı.
                     </span>
                   </div>
+                  <div className="">
+                    <Rate
+                      className="text-[15px] text-red-500 font-bold"
+                      disabled
+                      defaultValue={comment.rate}
+                    />
+                  </div>
+                  <div className="pt-1">{comment.comment}</div>
                 </div>
-                <div className="pt-2">
-                  <Rate
-                    className="text-[15px] text-red-500 font-bold"
-                    disabled
-                    defaultValue={comment.rate}
+                <div className="relative">
+                  <SwiperProfile
+                    comment={comment}
+                    user={{
+                      name: comment.userName,
+                      surname: comment.userSurname,
+                      userPhoto: comment.userPhoto,
+                      totalComment: comment.totalComment,
+                    }}
+                    API_IMAGES={API_IMAGES}
                   />
                 </div>
-                <div className="pt-1">{comment.comment}</div>
-              </div>
-              <div className="relative">
-                <SwiperProfile
-                  comment={comment}
-                  user={userProfile}
-                  API_IMAGES={API_IMAGES}
-                />
-              </div>
-              <div className="p-4 flex items-center gap-x-3 text-xs">
-                {existUser != null &&
-                comment.likedUsers.includes(parseInt(existUser.id)) ? (
-                  <button
-                    {...(loadingLike && { disabled: true })}
-                    onClick={() => DeleteComment(comment.id, index)}
-                    className="flex items-center gap-x-1 text-red-500 border-red-500"
-                  >
-                    <AiFillLike className="text-base" />
-                    <span>
-                      Beğen{" "}
-                      {comment.likedUsers.count > 0 &&
-                        "(" + comment.likedUsers.count + ")"}
-                    </span>
+                <div className="p-4 flex items-center gap-x-3 text-xs">
+                  {existUser != null &&
+                  comment.likedUsers.includes(parseInt(existUser.id)) ? (
+                    <button
+                      {...(loadingLike && { disabled: true })}
+                      onClick={() => DeleteComment(comment.id, index)}
+                      className="flex items-center gap-x-1 text-red-500 border-red-500"
+                    >
+                      <AiFillLike className="text-base" />
+                      <span>
+                        Beğen{" "}
+                        {comment.likedUsers.count > 0 &&
+                          "(" + comment.likedUsers.count + ")"}
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      {...(loadingLike && { disabled: true })}
+                      onClick={() => LikeComment(comment.id, index)}
+                      className="flex items-center gap-x-1  hover:text-red-500 hover:border-red-500"
+                    >
+                      <AiOutlineLike className="text-base" />
+                      <span>
+                        Beğen{" "}
+                        {comment.likedUsers.count > 0 &&
+                          "(" + comment.likedUsers.count + ")"}
+                      </span>
+                    </button>
+                  )}
+                  <button className="flex items-center gap-x-1 hover:text-red-500">
+                    <BsBookmark />
+                    Kaydet
                   </button>
-                ) : (
-                  <button
-                    {...(loadingLike && { disabled: true })}
-                    onClick={() => LikeComment(comment.id, index)}
-                    className="flex items-center gap-x-1  hover:text-red-500 hover:border-red-500"
-                  >
-                    <AiOutlineLike className="text-base" />
-                    <span>
-                      Beğen{" "}
-                      {comment.likedUsers.count > 0 &&
-                        "(" + comment.likedUsers.count + ")"}
-                    </span>
-                  </button>
-                )}
-                <button className="flex items-center gap-x-1 hover:text-red-500">
-                  <BsBookmark />
-                  Kaydet
-                </button>
+                </div>
               </div>
-            </div>
-          );
-        }
-      })}
+            );
+          } else {
+            return (
+              <div key={index} className="bg-white w-full">
+                <div className="p-4">
+                  <div className="flex gap-x-3">
+                    <img
+                      className="w-16 h-16 rounded"
+                      src={`${API_IMAGES}business/thumbnail${comment.businessImage}`}
+                    />
+                    <div className="flex-col flex">
+                      <div>
+                        <span>
+                          <Link
+                            target="_blank"
+                            to={`/isletme/${
+                              seoHelp(comment.businessName) +
+                              "-" +
+                              comment.businessId
+                            }`}
+                            className="hover:text-red-500 font-bold text-[15px]"
+                          >
+                            {comment.businessName}
+                          </Link>
+                        </span>
+                      </div>
+                      <span className="text-xs flex items-center">
+                        <BsGeoAltFill className="text-gray-500 mr-1" />{" "}
+                        {comment.location}
+                      </span>
+                      <span className="text-xs pt-2 text-gray-400">
+                        {moment(comment.created).format("DD.MM.yyyy")} tarihinde
+                        yorum yapıldı.
+                      </span>
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <Rate
+                      className="text-[15px] text-red-500 font-bold"
+                      disabled
+                      defaultValue={comment.rate}
+                    />
+                  </div>
+                  <div className="pt-1">{comment.comment}</div>
+                </div>
+                <div className="relative">
+                  <SwiperProfile
+                    comment={comment}
+                    user={userProfile}
+                    API_IMAGES={API_IMAGES}
+                  />
+                </div>
+                <div className="p-4 flex items-center gap-x-3 text-xs">
+                  {existUser != null &&
+                  comment.likedUsers.includes(parseInt(existUser.id)) ? (
+                    <button
+                      {...(loadingLike && { disabled: true })}
+                      onClick={() => DeleteComment(comment.id, index)}
+                      className="flex items-center gap-x-1 text-red-500 border-red-500"
+                    >
+                      <AiFillLike className="text-base" />
+                      <span>
+                        Beğen{" "}
+                        {comment.likedUsers.count > 0 &&
+                          "(" + comment.likedUsers.count + ")"}
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      {...(loadingLike && { disabled: true })}
+                      onClick={() => LikeComment(comment.id, index)}
+                      className="flex items-center gap-x-1  hover:text-red-500 hover:border-red-500"
+                    >
+                      <AiOutlineLike className="text-base" />
+                      <span>
+                        Beğen{" "}
+                        {comment.likedUsers.count > 0 &&
+                          "(" + comment.likedUsers.count + ")"}
+                      </span>
+                    </button>
+                  )}
+                  <button className="flex items-center gap-x-1 hover:text-red-500">
+                    <BsBookmark />
+                    Kaydet
+                  </button>
+                </div>
+              </div>
+            );
+          }
+        })
+      ) : (
+        <div className="mx-auto bg-white py-16">
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={"Beğenilen Yorum Bulunamadı"}
+          />
+        </div>
+      )}
+
       <div>{loading && <Skeleton active />}</div>
       <div>{error && "Error"}</div>
       <LoginModal
