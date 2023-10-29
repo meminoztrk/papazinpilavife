@@ -66,19 +66,13 @@ export default function Admin() {
     ),
     getItem("İşletmeler", "isletmeler", <BookOutlined />, [
       getItem(
-        <Link className="text-xs" to="/administrationv1/haberler">
-          Bekleyen İşletmeler
-        </Link>,
-        "haberler"
-      ),
-      getItem(
-        <Link className="text-xs" to="/administrationv1/haberler/yenihaber">
+        <Link className="text-xs" to="/administrationv1/isletmeler">
           Tüm İşletmeler
         </Link>,
         "yenihaber"
       ),
       getItem(
-        <Link className="text-xs" to="/administrationv1/haberler/yenihaber">
+        <Link className="text-xs" to="/administrationv1/isletmeler/yeniisletme">
           İşletme Ekle
         </Link>,
         "ekle"
@@ -90,8 +84,8 @@ export default function Admin() {
       <CommentOutlined />
     ),
     getItem(
-      <Link to="/administrationv1/yazarlar">Kullanıcılar</Link>,
-      "yazarlar",
+      <Link to="/administrationv1/kullanicilar">Kullanıcılar</Link>,
+      "kullanicilar",
       <TeamOutlined />
     ),
     getItem(

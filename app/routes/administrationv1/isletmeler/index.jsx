@@ -96,24 +96,23 @@ export default function index() {
 
   const getBusinesses = async () => {
     setTable({ loading: true });
-    setTimeout(() => {
-      fetch(API + `/Admin/GetBusinessesWithUser`, {
-        method: "POST",
-        headers: {
-          ApiKey: API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(filterPagination),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setTable({
-            loading: false,
-            data: data.data.adminBusiness,
-            count: data.data.businessCount,
-          });
+
+    fetch(API + `/Admin/GetBusinessesWithUser`, {
+      method: "POST",
+      headers: {
+        ApiKey: API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filterPagination),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTable({
+          loading: false,
+          data: data.data.items,
+          count: data.data.itemCount,
         });
-    }, 200);
+      });
   };
 
   const getBusiness = async (id) => {
@@ -466,24 +465,18 @@ export default function index() {
           placeholder="Onay"
           defaultValue={record.process}
           getPopupContainer={(trigger) => trigger.parentNode}
-          onSelect={(e) => setProcess(record.id,e)}
+          onSelect={(e) => setProcess(record.id, e)}
         >
-          <Option className="text-xs text-green-500" value="Onaylandı">Onaylandı</Option>
-          <Option className="text-xs text-red-500" value="Reddedildi">Reddedildi</Option>
-          <Option className="text-xs text-orange-500" value="Onay Bekliyor">Onay Bekliyor</Option>
-
+          <Option className="text-xs text-green-500" value="Onaylandı">
+            Onaylandı
+          </Option>
+          <Option className="text-xs text-red-500" value="Reddedildi">
+            Reddedildi
+          </Option>
+          <Option className="text-xs text-orange-500" value="Onay Bekliyor">
+            Onay Bekliyor
+          </Option>
         </Select>
-        // <span
-        //   className={`${
-        //     text === "Onay Bekliyor"
-        //       ? "text-orange-500"
-        //       : text === "Reddedildi"
-        //       ? "text-red-500"
-        //       : "text-green-500"
-        //   }`}
-        // >
-        //   {text}
-        // </span>
       ),
     },
     {
@@ -556,6 +549,9 @@ export default function index() {
   };
 
   const timeToString = (time) => {
+    if(!time){
+      return null;
+    }
     return time.length > 0
       ? moment(time[0]).format("HH:mm") +
           " - " +
@@ -564,6 +560,9 @@ export default function index() {
   };
 
   const stringToTime = (time) => {
+    if(!time){
+      return null;
+    }
     var array = time.split(" - ");
     return [
       moment(`01/01/2023 ${array[0]}`, "MM/DD/YYYY HH:mm"),
@@ -633,7 +632,7 @@ export default function index() {
         <button
           className="bg-blue-500 rounded-md hover:bg-blue-700 text-white p-2"
           onClick={() => {
-            navigate("/admin/haberler/yenihaber");
+            navigate("/administrationv1/isletmeler/yeniisletme");
           }}
           type="primary"
         >
@@ -1050,7 +1049,7 @@ export default function index() {
               </div>
               <div className="w-full">
                 <h2 className="font-medium my-1">
-                  Telefon (<span className="text-red-500">*</span>)
+                  Telefon
                 </h2>
                 <Form.Item className="mb-0">
                   <PhoneOutlined
@@ -1059,25 +1058,6 @@ export default function index() {
                   />
                   <Form.Item
                     name="phone"
-                    rules={[
-                      {
-                        validator(rule, value) {
-                          return new Promise((resolve, reject) => {
-                            if (
-                              value &&
-                              !value.includes("_") &&
-                              value.length > 0
-                            ) {
-                              resolve();
-                              setMaskBorder(false);
-                            } else {
-                              reject("Geçerli telefon numarası girin!");
-                              setMaskBorder(true);
-                            }
-                          });
-                        },
-                      },
-                    ]}
                   >
                     <ReactInputMask
                       className={`shadow pl-10 h-12 z-0 ${
@@ -1319,12 +1299,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="mo"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"
@@ -1341,12 +1315,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="tu"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"
@@ -1363,12 +1331,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="we"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"
@@ -1385,12 +1347,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="th"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"
@@ -1407,12 +1363,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="fr"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"
@@ -1429,12 +1379,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="sa"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"
@@ -1451,12 +1395,6 @@ export default function index() {
                     <Form.Item className="mb-0">
                       <Form.Item
                         name="su"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Çalışma saati girin!",
-                          },
-                        ]}
                       >
                         <TimePicker.RangePicker
                           className="text-center"

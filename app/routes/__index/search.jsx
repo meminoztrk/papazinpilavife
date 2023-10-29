@@ -126,7 +126,7 @@ const Search = () => {
               <div className="absolute right-2 top-0">
                 <BsThreeDots className="text-xl" />
               </div>
-              <div className="md:w-1/6 w-[95%]">
+              <div className="md:w-1/6 w-[95%] border rounded-lg">
                 <img
                   className="aspect-square w-full rounded-lg object-cover"
                   src={`${IMAGES}/business/thumbnail${bus.businessImage}`}

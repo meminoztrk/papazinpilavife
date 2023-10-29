@@ -571,6 +571,9 @@ const mybusinesses = () => {
   };
 
   const stringToTime = (time) => {
+    if(!time){
+      return null;
+    }
     var array = time.split(" - ");
     return [moment(`01/01/2023 ${array[0]}`,"MM/DD/YYYY HH:mm"), moment(`01/01/2023 ${array[1]}`,"MM/DD/YYYY HH:mm")]
   };

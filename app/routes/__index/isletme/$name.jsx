@@ -10,6 +10,8 @@ import {
   Upload,
   Pagination,
   notification,
+  Menu,
+  Dropdown,
 } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
@@ -122,7 +124,10 @@ const Business = () => {
       },
     })
       .then((resp) => {
-        openCommentNotification(true);
+        console.log(resp);
+        resp.data.errors
+          ? openCommentNotification(false, resp.data.errors[0])
+          : openCommentNotification(true);
         close();
       })
       .catch(function (error) {
@@ -220,6 +225,7 @@ const Business = () => {
   }, [formPagination, location]);
 
   useEffect(() => {
+    console.log(data);
     isIframeValidHTML(data.mapIframe);
   }, []);
 
@@ -228,6 +234,17 @@ const Business = () => {
       ? (document.body.style.overflow = "hidden")
       : (document.body.style.overflow = "unset");
   }, [openModal]);
+
+  const dotMenu = (
+    <Menu className="w-40">
+      <Menu.Item key="Newestss">
+        <div className="flex items-center space-x-2">
+          {/* <AiOutlineSetting size={16} /> */}
+          <span>Şikayet Et / Bildir</span>
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
 
   //#region Functions
 
@@ -240,16 +257,18 @@ const Business = () => {
   };
 
   const isOpen = (rangeString) => {
-    var range = rangeString.split(" - ");
-    var openTime = range[0].split(":").join("");
-    var closeTime = range[1].split(":").join("");
-    var nowTime = moment().format("HH:mm").split(":").join("");
-    var result = false;
-    result =
-      parseInt(openTime) < parseInt(nowTime) &&
-      parseInt(closeTime) > parseInt(nowTime) &&
-      true;
-    return result;
+    if (rangeString) {
+      var range = rangeString.split(" - ");
+      var openTime = range[0].split(":").join("");
+      var closeTime = range[1].split(":").join("");
+      var nowTime = moment().format("HH:mm").split(":").join("");
+      var result = false;
+      result =
+        parseInt(openTime) < parseInt(nowTime) &&
+        parseInt(closeTime) > parseInt(nowTime) &&
+        true;
+      return result;
+    }
   };
 
   const renderNowDate = () => {
@@ -368,7 +387,7 @@ const Business = () => {
     }
   }
 
-  const openCommentNotification = (isOk) => {
+  const openCommentNotification = (isOk, message) => {
     isOk
       ? notification.open({
           message: (
@@ -387,7 +406,9 @@ const Business = () => {
               <span>Yorumunuz iletilemedi.</span>
             </span>
           ),
-          description: "Yorumunuz iletilirken bir hata oluştu.",
+          description: message
+            ? message
+            : "Yorumunuz iletilirken bir hata oluştu.",
         });
   };
 
@@ -673,7 +694,15 @@ const Business = () => {
                 </div>
                 {/* // )} */}
                 <div className="rounded-lg cursor-pointer py-1 hover:text-red-500">
-                  <BsThreeDots className="text-[25px]" />
+                  <Dropdown
+                    placement="bottomRight"
+                    getPopupContainer={(trigger) => trigger.parentNode}
+                    transitionName=""
+                    overlay={dotMenu}
+                    trigger={["click"]}
+                  >
+                    <BsThreeDots className="text-[25px]" />
+                  </Dropdown>
                 </div>
               </div>
             </div>
@@ -682,7 +711,14 @@ const Business = () => {
               <p className="pt-1 px-1 text-gray-600 font-extralight">
                 {data.minHeader}
               </p>
-              {renderNowDate()}
+              {data.mo &&
+                data.tu &&
+                data.we &&
+                data.th &&
+                data.fr &&
+                data.sa &&
+                data.su &&
+                renderNowDate()}
             </div>
             <span className="px-1 text-gray-600 font-extralight">
               {data.neighborhood}, {data.district}, {data.city}
@@ -779,6 +815,11 @@ const Business = () => {
                         rules={[
                           {
                             required: true,
+                            message: "Lütfen puanlama girin!",
+                          },
+                          {
+                            type: "number",
+                            min: 0.5,
                             message: "Lütfen puanlama girin!",
                           },
                         ]}
@@ -1020,81 +1061,89 @@ const Business = () => {
                     </div>
                   )}
                 </div>
-                <div className="md:w-1/3 w-full justify-center">
-                  <div className="flex flex-wrap flex-col text-center rounded-2xl">
-                    <p className="p-1 font-semibold bg-red-500 text-white rounded-t-2xl">
-                      ÇALIŞMA SAATLERİ
-                    </p>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === 1 && "text-red-500"
-                      }`}
-                    >
-                      <span>PAZARTESİ</span>
-                      <span>
-                        {data.mo == "00:00 - 00:00" ? "Kapalı" : data.mo}
-                      </span>
+                {data.mo &&
+                  data.tu &&
+                  data.we &&
+                  data.th &&
+                  data.fr &&
+                  data.sa &&
+                  data.su && (
+                    <div className="md:w-1/3 w-full justify-center">
+                      <div className="flex flex-wrap flex-col text-center rounded-2xl">
+                        <p className="p-1 font-semibold bg-red-500 text-white rounded-t-2xl">
+                          ÇALIŞMA SAATLERİ
+                        </p>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === 1 && "text-red-500"
+                          }`}
+                        >
+                          <span>PAZARTESİ</span>
+                          <span>
+                            {data.mo == "00:00 - 00:00" ? "Kapalı" : data.mo}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === 2 && "text-red-500"
+                          }`}
+                        >
+                          <span>SALI</span>
+                          <span>
+                            {data.tu == "00:00 - 00:00" ? "Kapalı" : data.tu}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === 3 && "text-red-500"
+                          }`}
+                        >
+                          <span>ÇARŞAMBA</span>
+                          <span>
+                            {data.we == "00:00 - 00:00" ? "Kapalı" : data.we}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === 4 && "text-red-500"
+                          }`}
+                        >
+                          <span>PERŞEMBE</span>
+                          <span>
+                            {data.th == "00:00 - 00:00" ? "Kapalı" : data.th}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === 5 && "text-red-500"
+                          }`}
+                        >
+                          <span>CUMA</span>
+                          <span>
+                            {data.fr == "00:00 - 00:00" ? "Kapalı" : data.fr}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === 0 && "text-red-500"
+                          }`}
+                        >
+                          <span>CUMARTESİ</span>
+                          <span>
+                            {data.sa == "00:00 - 00:00" ? "Kapalı" : data.sa}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center justify-between px-4 p-1 font-extralight ${
+                            moment().day() === "Sunday" && "text-red-500"
+                          }`}
+                        >
+                          <span>PAZAR</span>
+                          {data.su == "00:00 - 00:00" ? "Kapalı" : data.su}
+                        </div>
+                      </div>
                     </div>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === 2 && "text-red-500"
-                      }`}
-                    >
-                      <span>SALI</span>
-                      <span>
-                        {data.tu == "00:00 - 00:00" ? "Kapalı" : data.tu}
-                      </span>
-                    </div>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === 3 && "text-red-500"
-                      }`}
-                    >
-                      <span>ÇARŞAMBA</span>
-                      <span>
-                        {data.we == "00:00 - 00:00" ? "Kapalı" : data.we}
-                      </span>
-                    </div>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === 4 && "text-red-500"
-                      }`}
-                    >
-                      <span>PERŞEMBE</span>
-                      <span>
-                        {data.th == "00:00 - 00:00" ? "Kapalı" : data.th}
-                      </span>
-                    </div>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === 5 && "text-red-500"
-                      }`}
-                    >
-                      <span>CUMA</span>
-                      <span>
-                        {data.fr == "00:00 - 00:00" ? "Kapalı" : data.fr}
-                      </span>
-                    </div>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === 0 && "text-red-500"
-                      }`}
-                    >
-                      <span>CUMARTESİ</span>
-                      <span>
-                        {data.sa == "00:00 - 00:00" ? "Kapalı" : data.sa}
-                      </span>
-                    </div>
-                    <div
-                      className={`flex items-center justify-between px-4 p-1 font-extralight ${
-                        moment().day() === "Sunday" && "text-red-500"
-                      }`}
-                    >
-                      <span>PAZAR</span>
-                      {data.su == "00:00 - 00:00" ? "Kapalı" : data.su}
-                    </div>
-                  </div>
-                </div>
+                  )}
               </div>
             </div>
 

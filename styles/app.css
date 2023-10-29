@@ -679,6 +679,10 @@ body {
   flex: 1 0 4.5%;
 }
 
+.preview .ant-upload-list-item-actions button {
+  display: none;
+}
+
 
 @media (max-width: 1700px) {
   .item {
